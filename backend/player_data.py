@@ -121,7 +121,7 @@ def create_player_data(ratings_df):
         ],
     )
 
-    ratings_df.date = ratings_df.date.astype("datetime64[D]")
+    ratings_df.date = ratings_df.date.astype("datetime64[ns]")
 
     player_df = calc_ratings(player_df, ratings_df)
 
@@ -131,4 +131,4 @@ def create_player_data(ratings_df):
 
     player_df = player_df.sort_values(by="latest_rating", ascending=False)
 
-    player_df.to_csv(conf.PLAYER_DATA_TSV_PATH, sep="\t", line_terminator="\n")
+    player_df.to_csv(conf.PLAYER_DATA_TSV_PATH, sep="\t", lineterminator="\n")

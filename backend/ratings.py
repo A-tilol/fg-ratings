@@ -82,6 +82,6 @@ def create_rating_data():
         ratings_df.loc[len(ratings_df)] = new_row
 
     ratings_df = ratings_df.sort_values(by=["date", "rating"], ascending=False)
-    ratings_df.to_csv(conf.RATINGS_TSV_PATH, sep="\t", line_terminator="\n")
+    ratings_df.to_csv(conf.RATINGS_TSV_PATH, sep="\t", lineterminator="\n")
 
     return ratings_df
