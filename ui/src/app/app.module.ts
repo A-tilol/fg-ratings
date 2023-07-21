@@ -9,9 +9,10 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
+import { PlayerComponent } from './player/player.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, PlayerComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

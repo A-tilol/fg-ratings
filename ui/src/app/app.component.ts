@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 export interface PlayerRatingElement {
   rank: number;
@@ -19,7 +20,7 @@ export class AppComponent implements OnInit {
   ratingTableData: PlayerRatingElement[] = [];
   displayedColumns: string[] = ['crown', 'rank', 'name', 'rating', 'winRate'];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
     this.http
