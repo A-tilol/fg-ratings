@@ -1,14 +1,14 @@
 <mat-toolbar color="primary">
-    <span>FG Ratings</span>
+    <span>格ゲーマー レーティング</span>
     <span class="example-spacer" style="flex: 1 1 auto;"></span>
-    <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-        <mat-icon>favorite</mat-icon>
-    </button>
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-        <mat-icon>share</mat-icon>
+    <button mat-flat-button color="primary" style="width:150px;">
+        <img src="assets/2021 Twitter logo - white.png" style="width:20%;margin-right:4px;padding-top:10px;">
+        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw"
+            data-show-count="false" style="color:white;">ツイートする</a>
+        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     </button>
 </mat-toolbar>
 
-<div style="margin: 15px;">
+<div style="margin: 15px;display:flex;justify-content: center;align-items: center;">
     <router-outlet></router-outlet>
 </div>
