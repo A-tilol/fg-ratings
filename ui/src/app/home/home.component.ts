@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit {
         rank: Number(values[6]),
         name: values[1],
         rating: Number(values[3]),
-        winRate: `${Math.round(Number(values[8]) * 100)} %`,
+        winRate: `${Math.round(Number(values[8]) * 100)}% (${Math.round(Number(values[10]))}/${Math.round(Number(values[9]))})`,
       });
     }
     return data;
