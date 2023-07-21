@@ -85,6 +85,7 @@ def calc_win_rate(player_df):
     lose_df = lose_df.rename(columns={"stage": "lose_n"})
 
     tmp_df = win_df.merge(lose_df, left_on="winner", right_on="loser", how="outer")
+    tmp_df["winner"] = tmp_df["winner"].combine_first(tmp_df["loser"])
     tmp_df = tmp_df.fillna(0)
     tmp_df["game_n"] = tmp_df["win_n"] + tmp_df["lose_n"]
     tmp_df["win_rate"] = tmp_df["win_n"] / tmp_df["game_n"]
