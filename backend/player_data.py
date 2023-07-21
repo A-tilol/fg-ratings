@@ -36,6 +36,13 @@ def calc_ratings(player_df, ratings_df):
     player_df["worst_rating"] = player_df.merge(
         worst_ratings[["name", "rating"]], on="name", how="left"
     )["rating"]
+    
+    # diff
+    tmp_df = ratings_df.sort_values(by="date", ascending=False).groupby(by="name").nth(0).reset_index()
+    player_df["diff_rating"] = player_df[["name"]].merge(
+        tmp_df[["name", "diff_from_last"]], on="name", how="left"
+    )["diff_from_last"]
+    player_df.loc[player_df["last_game_date"] != max(player_df["last_game_date"]),"diff_rating"] = 0
 
     return player_df
 
@@ -71,6 +78,8 @@ def calc_rank(player_df, ratings_df):
     player_df["diff_rank"] = player_df[["name"]].merge(
         merged_df[["name", "diff_rank"]], on="name", how="left"
     )["diff_rank"]
+    
+    player_df.loc[player_df["diff_rating"] == 0, "diff_rank"] = 0
 
     return player_df
 
@@ -113,6 +122,7 @@ def create_player_data(ratings_df):
             "latest_rating",
             "best_rating",
             "worst_rating",
+            "diff_rating",
             "rank",
             "diff_rank",
             "win_rate",
