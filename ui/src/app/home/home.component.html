@@ -1,9 +1,18 @@
-SFL 2023 個人レーティング 1stステージ 第3節までの結果を反映
+
+
+
+<mat-card style="margin-bottom:10px;">
+    <mat-card-header>
+        <mat-card-title style="font-size: larger;">SFL2023 個人レーティングランキング</mat-card-title>
+        <mat-card-subtitle>データ更新：1stステージ 第3節まで</mat-card-subtitle>
+    </mat-card-header>
+</mat-card>
+
 
 <table mat-table [dataSource]="ratingTableData" class="mat-elevation-z8">
     <ng-container matColumnDef="crown">
-        <th mat-header-cell *matHeaderCellDef style="width:60px;"> </th>
-        <td mat-cell *matCellDef="let element" style="width:60px">
+        <th mat-header-cell *matHeaderCellDef style="min-width:50px;max-width:60px;"> </th>
+        <td mat-cell *matCellDef="let element" style="min-width:50px;max-width:60px">
             <ng-container *ngIf="element.rank == 1">
                 <img src="assets/icons8-crown-96.png" style="width:100%">
             </ng-container>
@@ -36,8 +45,8 @@ SFL 2023 個人レーティング 1stステージ 第3節までの結果を反�
 
     <ng-container matColumnDef="rating">
         <th mat-header-cell *matHeaderCellDef style="min-width:80px;"> レート </th>
-        <td mat-cell *matCellDef="let element" style="min-width:80px;"> 
-            {{element.rating}} 
+        <td mat-cell *matCellDef="let element" style="min-width:80px;">
+            {{element.rating}}
             <ng-container *ngIf="element.isUpdated">
                 <sub>({{element.diffRating}})</sub>
             </ng-container>
@@ -46,8 +55,8 @@ SFL 2023 個人レーティング 1stステージ 第3節までの結果を反�
 
     <ng-container matColumnDef="winRate">
         <th mat-header-cell *matHeaderCellDef> 勝率 </th>
-        <td mat-cell *matCellDef="let element"> 
-            {{element.winRate}}% 
+        <td mat-cell *matCellDef="let element">
+            {{element.winRate}}%
             <sub>({{element.win_n}}/{{element.game_n}})</sub>
         </td>
     </ng-container>

@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-player',
   templateUrl: './player.component.html',
-  styleUrls: ['./player.component.css'],
+  styleUrls: ['./player.component.scss'],
 })
 export class PlayerComponent implements OnInit {
   playerName: string | null = '';
