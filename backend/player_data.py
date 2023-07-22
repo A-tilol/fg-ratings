@@ -112,6 +112,12 @@ def calc_win_rate(player_df):
 
     return player_df
 
+def set_update(player_df):
+    player_df.loc[player_df["last_game_date"] == max(player_df["last_game_date"]),"updated"] = True
+    player_df["updated"].fillna("", inplace=True)
+    
+    return player_df
+    
 
 def create_player_data(ratings_df):
     player_df = pd.DataFrame(
@@ -129,6 +135,7 @@ def create_player_data(ratings_df):
             "game_n",
             "win_n",
             "lose_n",
+            "updated",
         ],
     )
 
@@ -139,6 +146,8 @@ def create_player_data(ratings_df):
     player_df = calc_rank(player_df, ratings_df)
 
     player_df = calc_win_rate(player_df)
+    
+    player_df  = set_update(player_df)
 
     player_df = player_df.sort_values(by="latest_rating", ascending=False)
 
