@@ -3,13 +3,37 @@
     <mat-card style="margin-bottom:10px;">
         <mat-card-header>
             <mat-card-title style="font-size: larger;">{{playerName}}（未実装デモデータ）</mat-card-title>
-            <mat-card-subtitle>SNS、紹介</mat-card-subtitle>
+            <mat-card-subtitle>
+                <button mat-flat-button style="height:20px">
+                    <img src="assets/2021 Twitter logo - blue.png"
+                        style="width:16px;margin-right:2px;padding-top:10px;">
+                    <span style="padding-bottom:8px">@tachikawa</span>
+                </button>
+            </mat-card-subtitle>
         </mat-card-header>
+        <mat-card-content>
+            <mat-card style="margin:10px;">
+                <mat-card-content style="text-align: center;">
+                    ランク {{playerData.rank}}
+                </mat-card-content>
+            </mat-card>
+            <mat-card style="margin:10px;">
+                <mat-card-content style="text-align: center;">
+                    レーティング {{playerData.latestRating}}
+                </mat-card-content>
+            </mat-card>
+            <mat-card style="margin:10px;">
+                <mat-card-content style="text-align: center;">
+                    勝率 {{playerData.winRate}}％ ({{playerData.winN}}勝{{playerData.loseN}}敗)
+                </mat-card-content>
+            </mat-card>
+            <mat-card style="margin:10px;">
+                <mat-card-content style="text-align: center;">
+                    使用キャラ {{playerData.charactors}}
+                </mat-card-content>
+            </mat-card>
+        </mat-card-content>
     </mat-card>
-
-    <p>サマリー</p>
-    <div>TODO: 現レート、チーム、ランク、使用キャラ、勝率、試合数</div>
-    
 
     <div>TODO: best, worst</div>
     <div id="chart">
