@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
-import { HttpClientModule } from '@angular/common/http';
+import { HomeComponent } from './home/home.component';
+import { PlayerComponent } from './player/player.component';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,8 +15,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 
-import { HomeComponent } from './home/home.component';
-import { PlayerComponent } from './player/player.component';
+import { NgApexchartsModule } from "ng-apexcharts";
 
 @NgModule({
   declarations: [AppComponent, PlayerComponent, HomeComponent],
@@ -30,6 +30,7 @@ import { PlayerComponent } from './player/player.component';
     MatIconModule,
     MatButtonModule,
     MatCardModule,
+    NgApexchartsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

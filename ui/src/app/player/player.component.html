@@ -1,8 +1,26 @@
-<p>未実装</p>
+<div>
 
-{{playerName}}
+    <mat-card style="margin-bottom:10px;">
+        <mat-card-header>
+            <mat-card-title style="font-size: larger;">{{playerName}}（未実装デモデータ）</mat-card-title>
+            <mat-card-subtitle>SNS、紹介</mat-card-subtitle>
+        </mat-card-header>
+    </mat-card>
 
-<p>レーティングチャート</p>
-<p>サマリー</p>
-<p>戦績</p>
-<p>紹介/SNS</p>
+    <p>サマリー</p>
+    <div>TODO: 現レート、チーム、ランク、使用キャラ、勝率、試合数</div>
+    
+
+    <div>TODO: best, worst</div>
+    <div id="chart">
+        <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
+            [dataLabels]="chartOptions.dataLabels" [grid]="chartOptions.grid" [stroke]="chartOptions.stroke"
+            [title]="chartOptions.title"></apx-chart>
+    </div>
+
+    <p>戦績</p>
+    <div>TODO: 日付、勝敗（セット）、相手、相手レーティング、試合（ステージ、節、Match）</div>
+
+    <p>期待勝率</p>
+
+</div>
