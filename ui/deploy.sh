@@ -13,13 +13,14 @@ if [ "$current_branch" != "gh-pages" ]; then
     git checkout gh-pages
 fi
 
+git pull origin gh-pages    
 git merge main
 
 ng build --output-path ../docs
-
 cp ../docs/index.html ../docs/404.html
 
 git add ..
 git commit -m -
+git push origin gh-pages
 
 git checkout main
