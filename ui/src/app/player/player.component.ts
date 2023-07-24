@@ -25,7 +25,7 @@ export type ChartOptions = {
 
 export interface PlayerData {
   twitterId: string
-  charactors: string[]
+  charactors: string
   rank: number
   latestRating: number
   bestRating: number
@@ -47,7 +47,7 @@ export class PlayerComponent implements OnInit {
   playerName: string | null = '';
   playerData: PlayerData = {
     twitterId: "",
-    charactors: [],
+    charactors: "",
     rank: 0,
     latestRating: 0,
     bestRating: 0,
@@ -125,7 +125,7 @@ export class PlayerComponent implements OnInit {
     for (let line of playerLines) {
       const values = line.split('\t');
       console.log(values)
-      if (values.length != 2) continue;
+      if (values.length == 0) continue;
       if (values[0] == this.playerName) {
         playerValues = values
         break
@@ -140,7 +140,7 @@ export class PlayerComponent implements OnInit {
     for (let line of PlayerDatalines) {
       const values = line.split('\t');
       console.log(values)
-      if (values.length != 14) continue;
+      if (values.length == 0) continue;
       if (values[1] == this.playerName) {
         playerDataValues = values
         break
@@ -150,8 +150,8 @@ export class PlayerComponent implements OnInit {
     console.assert(playerDataValues.length > 0)
 
     const data: PlayerData = {
-      twitterId: playerValues[1],
-      charactors: playerValues[1].split(","),
+      twitterId: playerValues[6],
+      charactors: playerValues[7],
       rank: Math.round(Number(playerDataValues[7])),
       latestRating: Math.round(Number(playerDataValues[3])),
       bestRating: Math.round(Number(playerDataValues[4])),
@@ -161,5 +161,10 @@ export class PlayerComponent implements OnInit {
       loseN: Math.round(Number(playerDataValues[13])),
     }
     return data;
+  }
+
+  openTwitter() {
+    const url = `https://twitter.com/${this.playerData.twitterId}`
+    window.open(url, "_blank")
   }
 }
