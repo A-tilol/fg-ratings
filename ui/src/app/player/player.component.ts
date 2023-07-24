@@ -62,50 +62,22 @@ export class PlayerComponent implements OnInit {
       series: [
         {
           name: "レーティング",
-          data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
-        }
-      ],
+          data: [1],
+        }],
       chart: {
-        height: 350,
         type: "line",
-        zoom: {
-          enabled: false
-        }
       },
-      dataLabels: {
-        enabled: true
-      },
-      stroke: {
-        curve: "straight"
-      },
-      title: {
-        text: "レーティング推移",
-        align: "left"
-      },
-      grid: {
-        row: {
-          colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
-          opacity: 0.5
-        }
-      },
-      xaxis: {
-        categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep"
-        ]
-      }
+      dataLabels: {},
+      stroke: {},
+      title: {},
+      grid: {},
+      xaxis: {}
     };
   }
 
   ngOnInit(): void {
     this.playerName = this.route.snapshot.paramMap.get('name');
+
     this.http
       .get('assets/players.tsv', { responseType: 'text' })
       .subscribe((playerTsv) => {
@@ -115,6 +87,12 @@ export class PlayerComponent implements OnInit {
             this.playerData = this.loadPlayerData(playerTsv, playerDataTsv);
             console.log(this.playerData);
           });
+      });
+
+    this.http
+      .get('assets/ratings.tsv', { responseType: 'text' })
+      .subscribe((ratingsTsv) => {
+        this.createRatingChartData(ratingsTsv);
       });
   }
 
@@ -161,6 +139,61 @@ export class PlayerComponent implements OnInit {
       loseN: Math.round(Number(playerDataValues[13])),
     }
     return data;
+  }
+
+  createRatingChartData(ratingsTsv: string) {
+    let lines = ratingsTsv.split('\n');
+    lines.shift();
+
+    let dateToRatings: { [key: string]: number } = {}
+    for (let line of lines) {
+      const values = line.split('\t');
+      console.log(values)
+      if (values.length == 0) continue;
+      if (values[3] != this.playerName) continue
+
+      const date: string = values[2]
+      const rating: number = Number(values[4])
+
+      if (date in dateToRatings) continue
+
+      dateToRatings[date] = rating
+    }
+
+    this.chartOptions = {
+      series: [
+        {
+          name: "レーティング",
+          data: Object.values(dateToRatings).reverse(),
+        }
+      ],
+      chart: {
+        height: 350,
+        type: "line",
+        zoom: {
+          enabled: false
+        }
+      },
+      dataLabels: {
+        enabled: true
+      },
+      stroke: {
+        curve: "straight"
+      },
+      title: {
+        text: "レーティング推移",
+        align: "left"
+      },
+      grid: {
+        row: {
+          colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+          opacity: 0.5
+        }
+      },
+      xaxis: {
+        categories: Object.keys(dateToRatings).reverse()
+      }
+    };
   }
 
   openTwitter() {
