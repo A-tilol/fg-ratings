@@ -325,7 +325,6 @@ export class PlayerComponent implements OnInit {
   }
 
   navigateToPlayerComponent(playerName: string) {
-    // this.router.navigate(['/player', playerName]);
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       this.router.navigate(['/player', playerName]);
     });
