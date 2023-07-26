@@ -3,9 +3,10 @@
         <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-        <button mat-menu-item>SFL2023 ランキング</button>
-        <button mat-menu-item>レーティング計算方式</button>
-        <button mat-menu-item>要望</button>
+        <button mat-menu-item><mat-icon>trending_up</mat-icon>SFL2023 個人ランキング</button>
+        <button mat-menu-item disabled><mat-icon>trending_up</mat-icon>SFL2023 チームランキング</button>
+        <button mat-menu-item disabled><mat-icon>calculate</mat-icon>レーティング計算方式</button>
+        <button mat-menu-item disabled><mat-icon>mail</mat-icon>要望</button>
     </mat-menu>
     <span style="font-size:0.9em;">格ゲーマーレーティング</span>
     <span class="example-spacer" style="flex: 1 1 auto;"></span>
