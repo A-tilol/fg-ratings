@@ -35,14 +35,14 @@
         </mat-card-content>
     </mat-card>
 
-    <div id="chart">
+    <div id="chart" style="margin-top: 25px">
         <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
             [dataLabels]="chartOptions.dataLabels" [grid]="chartOptions.grid" [stroke]="chartOptions.stroke"
             [title]="chartOptions.title"></apx-chart>
     </div>
 
     <!-- TODO: add opponet ratings, rateDiff -->
-    <mat-card style="margin-top:10px">
+    <mat-card style="margin-top:20px">
         <mat-card-header>
             <mat-card-title> 戦績 </mat-card-title>
         </mat-card-header>
@@ -76,8 +76,8 @@
                 <ng-container matColumnDef="opponent">
                     <th mat-header-cell *matHeaderCellDef style="min-width:100px;"> 対戦相手 </th>
                     <td mat-cell *matCellDef="let element" style="min-width:100px;">
-                        <!-- TODO RouterLink -->
-                        {{element.opponentName}}
+                        <button mat-flat-button
+                            (click)="navigateToPlayerComponent(element.opponentName)">{{element.opponentName}}</button>
                     </td>
                 </ng-container>
 
@@ -88,7 +88,7 @@
     </mat-card>
 
     <!-- <div>TODO: 対戦相手、レーティング、勝率、実績</div> -->
-    <mat-card style="margin-top:20px">
+    <mat-card style="margin-top:25px">
         <mat-card-header>
             <mat-card-title> 期待勝率 </mat-card-title>
         </mat-card-header>
@@ -97,8 +97,8 @@
                 <ng-container matColumnDef="opponentName">
                     <th mat-header-cell *matHeaderCellDef style="min-width:100px;"> 対戦相手 </th>
                     <td mat-cell *matCellDef="let element" style="min-width:100px;">
-                        <!-- TODO RouterLink -->
-                        {{element.opponentName}}
+                        <button mat-flat-button
+                            (click)="navigateToPlayerComponent(element.opponentName)">{{element.opponentName}}</button>
                     </td>
                 </ng-container>
 

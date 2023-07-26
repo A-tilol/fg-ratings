@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import {
   ApexAxisChartSeries,
@@ -88,7 +88,11 @@ export class PlayerComponent implements OnInit {
     'winRate',
   ];
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private http: HttpClient
+  ) {
     this.chartOptions = {
       series: [
         {
@@ -128,12 +132,14 @@ export class PlayerComponent implements OnInit {
       .get('assets/ratings.tsv', { responseType: 'text' })
       .subscribe((ratingsTsv) => {
         this.chartOptions = this.createRatingChartData(ratingsTsv);
+        console.log(this.chartOptions);
       });
 
     this.http
       .get('assets/results.tsv', { responseType: 'text' })
       .subscribe((resultsTsv) => {
         this.battleRecordTableData = this.createBattleRecordData(resultsTsv);
+        console.log(this.battleRecordTableData);
       });
   }
 
@@ -143,14 +149,12 @@ export class PlayerComponent implements OnInit {
     let playerValues: string[] = [];
     for (let line of playerLines) {
       const values = line.split('\t');
-      console.log(values);
       if (values.length == 0) continue;
       if (values[0] == this.playerName) {
         playerValues = values;
         break;
       }
     }
-    console.log(playerValues);
     console.assert(playerValues.length > 0);
 
     let PlayerDatalines = playerDataTsv.split('\n');
@@ -158,14 +162,12 @@ export class PlayerComponent implements OnInit {
     let playerDataValues: string[] = [];
     for (let line of PlayerDatalines) {
       const values = line.split('\t');
-      console.log(values);
       if (values.length == 0) continue;
       if (values[1] == this.playerName) {
         playerDataValues = values;
         break;
       }
     }
-    console.log(playerDataValues);
     console.assert(playerDataValues.length > 0);
 
     const data: PlayerData = {
@@ -189,7 +191,6 @@ export class PlayerComponent implements OnInit {
     let dateToRatings: { [key: string]: number } = {};
     for (let line of lines) {
       const values = line.split('\t');
-      console.log(values);
       if (values.length == 0) continue;
       if (values[3] != this.playerName) continue;
 
@@ -244,7 +245,6 @@ export class PlayerComponent implements OnInit {
     let winRateRecords: WinRateRecord[] = [];
     for (let line of lines) {
       const values = line.split('\t');
-      console.log(values);
       if (values.length < 2) continue;
       if (values[1] == this.playerName) continue;
 
@@ -276,7 +276,6 @@ export class PlayerComponent implements OnInit {
     let battleRecords = [];
     for (let line of lines) {
       const values = line.split('\t');
-      console.log(values);
       if (values.length == 0) continue;
 
       const winner = values[4];
@@ -323,6 +322,13 @@ export class PlayerComponent implements OnInit {
   openTwitter() {
     const url = `https://twitter.com/${this.playerData.twitterId}`;
     window.open(url, '_blank');
+  }
+
+  navigateToPlayerComponent(playerName: string) {
+    // this.router.navigate(['/player', playerName]);
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['/player', playerName]);
+    });
   }
 
   getWinrateColor(winRate: string) {
