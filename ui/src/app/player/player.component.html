@@ -7,7 +7,7 @@
                 <button mat-flat-button (click)="openTwitter()" style="height:20px">
                     <img src="assets/2021 Twitter logo - blue.png"
                         style="width:16px;margin-right:2px;padding-top:10px;">
-                    <span style="padding-bottom:8px">@tachikawa</span>
+                    <span style="padding-bottom:8px">@{{playerData.twitterId}}</span>
                 </button>
             </mat-card-subtitle>
         </mat-card-header>
@@ -35,16 +35,65 @@
         </mat-card-content>
     </mat-card>
 
-    <div>TODO: best, worst</div>
     <div id="chart">
         <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
             [dataLabels]="chartOptions.dataLabels" [grid]="chartOptions.grid" [stroke]="chartOptions.stroke"
             [title]="chartOptions.title"></apx-chart>
     </div>
 
-    <p>戦績</p>
-    <div>TODO: 日付、勝敗（セット）、相手、相手レーティング、試合（ステージ、節、Match）</div>
+    <!-- TODO: add opponet ratings, rateDiff -->
+    <mat-card style="margin-top:10px">
+        <mat-card-header>
+            <mat-card-title> 戦績 </mat-card-title>
+        </mat-card-header>
+        <mat-card-content style="margin-top:10px">
+            <table mat-table [dataSource]="battleRecordTableData" class="mat-elevation-z8">
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef style="min-width:90px;"></th>
+                    <td mat-cell *matCellDef="let element" style="min-width:90px;">
+                        {{element.date}}
+                    </td>
+                </ng-container>
 
-    <p>期待勝率</p>
+                <ng-container matColumnDef="SFLMatchName">
+                    <th mat-header-cell *matHeaderCellDef style="min-width:100px;"> 試合 </th>
+                    <td mat-cell *matCellDef="let element" style="min-width:100px;">
+                        {{element.SFLStage}}st {{element.SFLQuarter}}節 Match{{element.SFLMatch}}
+                    </td>
+                </ng-container>
 
+                <ng-container matColumnDef="result">
+                    <th mat-header-cell *matHeaderCellDef style="min-width:50px;"> 勝敗 </th>
+                    <td mat-cell *matCellDef="let element" style="min-width:50px;">
+                        <ng-container *ngIf="element.isWin; else loseTag"><span
+                                style="color:red;font-weight:bold;">◯</span></ng-container>
+                        <ng-template #loseTag><span style="color:blue;font-weight:bold;">✕</span></ng-template>
+                        <span style="padding-left:15px;white-space:nowrap;">{{element.winSetN}} -
+                            {{element.loseSetN}}</span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="opponent">
+                    <th mat-header-cell *matHeaderCellDef style="min-width:100px;"> 対戦相手 </th>
+                    <td mat-cell *matCellDef="let element" style="min-width:100px;">
+                        <!-- TODO RouterLink -->
+                        {{element.opponentName}}
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </mat-card-content>
+    </mat-card>
+
+    <!-- <div>TODO: 対戦相手、レーティング、勝率、実績</div> -->
+    <mat-card style="margin-top:20px">
+        <mat-card-header>
+            <mat-card-title> 期待勝率 </mat-card-title>
+        </mat-card-header>
+        <mat-card-content style="margin-top:10px">
+
+        </mat-card-content>
+    </mat-card>
 </div>
