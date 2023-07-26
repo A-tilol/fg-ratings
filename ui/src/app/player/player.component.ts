@@ -48,6 +48,13 @@ export interface BattleRecord {
   ratingDiff?: number;
 }
 
+export interface WinRateRecord {
+  opponentName: string;
+  opponentRating: number;
+  rateDiff: number;
+  winRate: string;
+}
+
 @Component({
   selector: 'app-player',
   templateUrl: './player.component.html',
@@ -72,6 +79,14 @@ export class PlayerComponent implements OnInit {
 
   battleRecordTableData: BattleRecord[] = [];
   displayedColumns: string[] = ['date', 'SFLMatchName', 'result', 'opponent'];
+
+  winRateTableData: WinRateRecord[] = [];
+  winRateTableColumns: string[] = [
+    'opponentName',
+    'opponentRating',
+    'rateDiff',
+    'winRate',
+  ];
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {
     this.chartOptions = {
@@ -103,13 +118,16 @@ export class PlayerComponent implements OnInit {
           .subscribe((playerDataTsv) => {
             this.playerData = this.loadPlayerData(playerTsv, playerDataTsv);
             console.log(this.playerData);
+
+            this.winRateTableData = this.createWinRateTableData(playerDataTsv);
+            console.log(this.winRateTableData);
           });
       });
 
     this.http
       .get('assets/ratings.tsv', { responseType: 'text' })
       .subscribe((ratingsTsv) => {
-        this.createRatingChartData(ratingsTsv);
+        this.chartOptions = this.createRatingChartData(ratingsTsv);
       });
 
     this.http
@@ -164,7 +182,7 @@ export class PlayerComponent implements OnInit {
     return data;
   }
 
-  createRatingChartData(ratingsTsv: string) {
+  createRatingChartData(ratingsTsv: string): ChartOptions {
     let lines = ratingsTsv.split('\n');
     lines.shift();
 
@@ -183,7 +201,7 @@ export class PlayerComponent implements OnInit {
       dateToRatings[date] = rating;
     }
 
-    this.chartOptions = {
+    return {
       series: [
         {
           name: 'レーティング',
@@ -217,6 +235,38 @@ export class PlayerComponent implements OnInit {
         categories: Object.keys(dateToRatings).reverse(),
       },
     };
+  }
+
+  createWinRateTableData(ratingsTsv: string): WinRateRecord[] {
+    let lines = ratingsTsv.split('\n');
+    lines.shift();
+
+    let winRateRecords: WinRateRecord[] = [];
+    for (let line of lines) {
+      const values = line.split('\t');
+      console.log(values);
+      if (values.length < 2) continue;
+      if (values[1] == this.playerName) continue;
+
+      const rating: number = Number(values[3]);
+
+      const winRate = (
+        Math.round(
+          (1 / (1 + 10 ** ((rating - this.playerData.latestRating) / 400))) *
+            1000
+        ) / 10
+      ).toFixed(1);
+
+      const wrr: WinRateRecord = {
+        opponentName: values[1],
+        opponentRating: rating,
+        rateDiff: this.playerData.latestRating - rating,
+        winRate: winRate,
+      };
+      winRateRecords.push(wrr);
+    }
+
+    return winRateRecords;
   }
 
   createBattleRecordData(resultsTsv: string): BattleRecord[] {
@@ -273,5 +323,21 @@ export class PlayerComponent implements OnInit {
   openTwitter() {
     const url = `https://twitter.com/${this.playerData.twitterId}`;
     window.open(url, '_blank');
+  }
+
+  getWinrateColor(winRate: string) {
+    const wrate = Number(winRate);
+
+    if (wrate > 90) return 'color: #550000';
+    else if (wrate > 80) return 'color: #880000';
+    else if (wrate > 70) return 'color: #AA0000';
+    else if (wrate > 60) return 'color: #CC0000';
+    else if (wrate > 55) return 'color: #EE0000';
+    else if (wrate > 45) return 'color: #00BB00';
+    else if (wrate > 40) return 'color: #0000EE';
+    else if (wrate > 30) return 'color: #0000CC';
+    else if (wrate > 20) return 'color: #0000AA';
+    else if (wrate > 10) return 'color: #000088';
+    else return 'color: #000055';
   }
 }
