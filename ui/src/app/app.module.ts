@@ -17,9 +17,10 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { TeamRankingComponent } from './team-ranking/team-ranking.component';
 
 @NgModule({
-  declarations: [AppComponent, PlayerComponent, HomeComponent],
+  declarations: [AppComponent, PlayerComponent, HomeComponent, TeamRankingComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
