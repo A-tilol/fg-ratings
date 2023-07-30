@@ -32,6 +32,13 @@ def calc_rank(team_results_df):
     latest_ratings["rank"] = (
         latest_ratings["rating"].rank(ascending=False, method="min").astype(int)
     )
+    team_results_df["rank"] = (
+        team_results_df[["name", "date"]]
+        .merge(
+            latest_ratings[["name", "date", "rank"]], on=["name", "date"], how="left"
+        )["rank"]
+        .tolist()
+    )
 
     second_latest_ratings = (
         team_results_df.sort_values(by="date", ascending=False)
@@ -44,26 +51,22 @@ def calc_rank(team_results_df):
     )
 
     merged_df = latest_ratings.merge(second_latest_ratings, on="name", how="left")
+    merged_df["diff_rating"] = merged_df["rating_x"] - merged_df["rating_y"]
     merged_df["diff_rank"] = merged_df["rank_y"] - merged_df["rank_x"]
 
-    team_results_df["rank"] = (
-        team_results_df[["name", "date"]]
-        .merge(
-            latest_ratings[["name", "date", "rank"]], on=["name", "date"], how="left"
-        )["rank"]
-        .tolist()
+    t = team_results_df[["name", "date"]].merge(
+        merged_df,
+        left_on=["name", "date"],
+        right_on=["name", "date_x"],
+        how="left",
     )
+    team_results_df["diff_rating"] = t["diff_rating"].tolist()
+    team_results_df["diff_rank"] = t["diff_rank"].tolist()
 
-    team_results_df["diff_rank"] = (
-        team_results_df[["name", "date"]]
-        .merge(
-            merged_df[["name", "date_x", "diff_rank"]],
-            left_on=["name", "date"],
-            right_on=["name", "date_x"],
-            how="left",
-        )["diff_rank"]
-        .tolist()
-    )
+    team_results_df["updated"] = False
+    team_results_df.loc[
+        team_results_df["date"] == team_results_df["date"].max(), "updated"
+    ] = True
 
     # points, game_n
     t = team_results_df.groupby("name").sum().reset_index()
@@ -78,17 +81,20 @@ def calc_rank(team_results_df):
             "date",
             "name",
             "rating",
+            "diff_rating",
             "rank",
             "diff_rank",
             "points",
             "game_n",
             "win_n",
             "lose_n",
+            "updated",
         ]
     ]
     team_results_df = team_results_df.dropna()
     team_results_df["rank"] = team_results_df["rank"].astype(int)
     team_results_df["diff_rank"] = team_results_df["diff_rank"].astype(int)
+    team_results_df["diff_rating"] = team_results_df["diff_rating"].astype(int)
     team_results_df = team_results_df.sort_values(
         by=["rank", "date"], ascending=[True, False]
     )
