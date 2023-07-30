@@ -1,6 +1,5 @@
-import pandas as pd
-
 import conf
+import pandas as pd
 
 
 def calc_ratings(player_df, ratings_df):
@@ -36,13 +35,20 @@ def calc_ratings(player_df, ratings_df):
     player_df["worst_rating"] = player_df.merge(
         worst_ratings[["name", "rating"]], on="name", how="left"
     )["rating"]
-    
+
     # diff
-    tmp_df = ratings_df.sort_values(by="date", ascending=False).groupby(by="name").nth(0).reset_index()
+    tmp_df = (
+        ratings_df.sort_values(by="date", ascending=False)
+        .groupby(by="name")
+        .nth(0)
+        .reset_index()
+    )
     player_df["diff_rating"] = player_df[["name"]].merge(
         tmp_df[["name", "diff_from_last"]], on="name", how="left"
     )["diff_from_last"]
-    player_df.loc[player_df["last_game_date"] != max(player_df["last_game_date"]),"diff_rating"] = 0
+    player_df.loc[
+        player_df["last_game_date"] != max(player_df["last_game_date"]), "diff_rating"
+    ] = 0
 
     return player_df
 
@@ -78,7 +84,7 @@ def calc_rank(player_df, ratings_df):
     player_df["diff_rank"] = player_df[["name"]].merge(
         merged_df[["name", "diff_rank"]], on="name", how="left"
     )["diff_rank"]
-    
+
     player_df.loc[player_df["diff_rating"] == 0, "diff_rank"] = 0
 
     return player_df
@@ -112,12 +118,15 @@ def calc_win_rate(player_df):
 
     return player_df
 
+
 def set_update(player_df):
-    player_df.loc[player_df["last_game_date"] == max(player_df["last_game_date"]),"updated"] = True
+    player_df.loc[
+        player_df["last_game_date"] == max(player_df["last_game_date"]), "updated"
+    ] = True
     player_df["updated"].fillna("", inplace=True)
-    
+
     return player_df
-    
+
 
 def create_player_data(ratings_df):
     player_df = pd.DataFrame(
@@ -146,8 +155,8 @@ def create_player_data(ratings_df):
     player_df = calc_rank(player_df, ratings_df)
 
     player_df = calc_win_rate(player_df)
-    
-    player_df  = set_update(player_df)
+
+    player_df = set_update(player_df)
 
     player_df = player_df.sort_values(by="latest_rating", ascending=False)
 
