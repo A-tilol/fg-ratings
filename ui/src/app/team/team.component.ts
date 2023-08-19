@@ -49,7 +49,9 @@ export class TeamComponent implements OnInit {
       if (values.length < 2) continue;
 
       let diffRank = Math.round(Number(values[5])).toString();
-      if (Number(diffRank) >= 0) {
+      if (Number(diffRank) == 0) {
+        diffRank = '±' + diffRank;
+      } else if (Number(diffRank) > 0) {
         diffRank = '+' + diffRank;
       }
 

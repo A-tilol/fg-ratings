@@ -1,4 +1,16 @@
 date	sfl_stage	sfl_quarter	sfl_match	name	opponent	game_n	win_n	lose_n	points	rating	rate_diff
+2023-08-18	1	5	1	広島 TEAM iXA	忍ism Gaming	4	2	2	25	1460	19
+2023-08-18	1	5	1	忍ism Gaming	広島 TEAM iXA	4	2	2	20	1494	-19
+2023-08-18	1	5	2	Saishunkan Sol 熊本	名古屋OJA BODY STAR	3	2	1	30	1553	13
+2023-08-18	1	5	2	名古屋OJA BODY STAR	Saishunkan Sol 熊本	3	1	2	10	1461	-13
+2023-08-18	1	5	3	FAV gaming	DetonatioN FocusMe	3	2	1	30	1580	11
+2023-08-18	1	5	3	DetonatioN FocusMe	FAV gaming	3	1	2	10	1436	-11
+2023-08-15	1	4	1	CAG	名古屋OJA BODY STAR	3	2	1	30	1509	16
+2023-08-15	1	4	1	名古屋OJA BODY STAR	CAG	3	1	2	10	1474	-16
+2023-08-15	1	4	2	FAV gaming	Good 8 Squad	3	2	1	30	1569	15
+2023-08-15	1	4	2	Good 8 Squad	FAV gaming	3	1	2	10	1523	-15
+2023-08-15	1	4	3	広島 TEAM iXA	魚群	3	1	2	10	1441	-15
+2023-08-15	1	4	3	魚群	広島 TEAM iXA	3	2	1	30	1484	15
 2023-07-18	1	3	1	Good 8 Squad	魚群	3	2	1	30	1538	14
 2023-07-18	1	3	1	魚群	Good 8 Squad	3	1	2	10	1469	-14
 2023-07-18	1	3	2	広島 TEAM iXA	名古屋OJA BODY STAR	3	1	2	10	1456	-16
