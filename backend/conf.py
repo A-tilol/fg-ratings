@@ -7,3 +7,5 @@ TEAM_RESULTS_TSV_PATH = "./data/team_results.tsv"
 RATINGS_TSV_PATH = "./data/ratings.tsv"
 TEAM_RATINGS_TSV_PATH = "./data/team_ratings.tsv"
 PLAYER_DATA_TSV_PATH = "./data/player_data.tsv"
+
+SFL_2023_RESULTS_DIR = "./data/sfl_2023/results"
