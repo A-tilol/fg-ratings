@@ -43,6 +43,8 @@ export class HomeComponent implements OnInit {
 
       let diffRank = Math.round(Number(values[8])).toString();
       if (Number(diffRank) >= 0) {
+        diffRank = '±' + diffRank;
+      } else if (Number(diffRank) > 0) {
         diffRank = '+' + diffRank;
       }
 
