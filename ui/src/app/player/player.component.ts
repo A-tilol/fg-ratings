@@ -115,10 +115,10 @@ export class PlayerComponent implements OnInit {
     this.playerName = this.route.snapshot.paramMap.get('name');
 
     this.http
-      .get('assets/players.tsv', { responseType: 'text' })
+      .get('assets/sfl_2023/players.tsv', { responseType: 'text' })
       .subscribe((playerTsv) => {
         this.http
-          .get('assets/player_data.tsv', { responseType: 'text' })
+          .get('assets/sfl_2023/player_data.tsv', { responseType: 'text' })
           .subscribe((playerDataTsv) => {
             this.playerData = this.loadPlayerData(playerTsv, playerDataTsv);
             console.log(this.playerData);
@@ -129,14 +129,14 @@ export class PlayerComponent implements OnInit {
       });
 
     this.http
-      .get('assets/ratings.tsv', { responseType: 'text' })
+      .get('assets/sfl_2023/ratings.tsv', { responseType: 'text' })
       .subscribe((ratingsTsv) => {
         this.chartOptions = this.createRatingChartData(ratingsTsv);
         console.log(this.chartOptions);
       });
 
     this.http
-      .get('assets/results.tsv', { responseType: 'text' })
+      .get('assets/sfl_2023/results.tsv', { responseType: 'text' })
       .subscribe((resultsTsv) => {
         this.battleRecordTableData = this.createBattleRecordData(resultsTsv);
         console.log(this.battleRecordTableData);
