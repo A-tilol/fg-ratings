@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.http
-      .get('assets/player_data.tsv', { responseType: 'text' })
+      .get('assets/sfl_2023/player_data.tsv', { responseType: 'text' })
       .subscribe((tsvData) => {
         this.ratingTableData = this.loadRatingTableData(tsvData);
         console.log(this.ratingTableData);

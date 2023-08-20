@@ -33,7 +33,7 @@ export class TeamComponent implements OnInit {
 
   ngOnInit(): void {
     this.http
-      .get('assets/team_ratings.tsv', { responseType: 'text' })
+      .get('assets/sfl_2023/team_ratings.tsv', { responseType: 'text' })
       .subscribe((tsvData) => {
         this.ratingTableData = this.loadRatingTableData(tsvData);
         // console.log(this.ratingTableData);
