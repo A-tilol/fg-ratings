@@ -40,6 +40,7 @@ export interface BattleRecord {
   SFLStage: number;
   SFLQuarter: number;
   SFLMatch: number;
+  SFLBattle: number;
   isWin: boolean;
   winSetN: number;
   loseSetN: number;
@@ -300,6 +301,7 @@ export class PlayerComponent implements OnInit {
         SFLStage: Number(values[0]),
         SFLQuarter: Number(values[1]),
         SFLMatch: Number(values[2]),
+        SFLBattle: Number(values[8]),
         isWin: isWin,
         winSetN: winSetN,
         loseSetN: loseSetN,
@@ -313,7 +315,8 @@ export class PlayerComponent implements OnInit {
     battleRecords.sort((a, b) => {
       if (a.date < b.date) return 1;
       if (a.date > b.date) return -1;
-      return 0;
+      if (a.SFLBattle < b.SFLBattle) return 1;
+      return -1;
     });
 
     return battleRecords;
