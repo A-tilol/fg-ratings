@@ -39,30 +39,30 @@ export class HomeComponent implements OnInit {
     lines.shift();
     for (let line of lines) {
       const values = line.split('\t');
-      if (values.length != 14) continue;
+      if (values.length < 2) continue;
 
-      let diffRank = Math.round(Number(values[8])).toString();
-      if (Number(diffRank) >= 0) {
+      let diffRank = Math.round(Number(values[7])).toString();
+      if (Number(diffRank) == 0) {
         diffRank = '±' + diffRank;
       } else if (Number(diffRank) > 0) {
         diffRank = '+' + diffRank;
       }
 
-      let diffRating = values[6];
+      let diffRating = values[5];
       if (Number(diffRating) >= 0) {
         diffRating = '+' + diffRating;
       }
 
       data.push({
-        rank: Number(values[7]),
+        rank: Number(values[6]),
         diffRank: diffRank,
-        name: values[1],
-        rating: Number(values[3]),
+        name: values[0],
+        rating: Number(values[2]),
         diffRating: diffRating,
-        winRate: Math.round(Number(values[10]) * 100),
-        game_n: Math.round(Number(values[11])),
-        win_n: Math.round(Number(values[12])),
-        isUpdated: values[9] == 'True',
+        winRate: Math.round(Number(values[9]) * 100),
+        game_n: Math.round(Number(values[10])),
+        win_n: Math.round(Number(values[11])),
+        isUpdated: values[8] == 'True',
       });
     }
     return data;

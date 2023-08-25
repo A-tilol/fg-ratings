@@ -1,9 +1,8 @@
 """
 """
 
-import pandas as pd
-
 import conf
+import pandas as pd
 
 
 def init_ratings():
@@ -14,7 +13,6 @@ def init_ratings():
     for name in df.name.tolist():
         data.append(
             {
-                "id": 0,
                 "date": "2023-07-01",
                 "name": name,
                 "rating": conf.INITIAL_RATING,
@@ -22,7 +20,7 @@ def init_ratings():
             }
         )
     ratings_df = pd.DataFrame(
-        data, columns=["id", "date", "name", "rating", "diff_from_last"]
+        data, columns=["date", "battle", "name", "rating", "diff_from_last"]
     )
 
     return player_ratings, ratings_df
@@ -63,8 +61,8 @@ def create_rating_data():
 
         # winner
         new_row = {
-            "id": i + 1,
             "date": row.date,
+            "battle": row.battle,
             "name": row.winner,
             "rating": player_ratings[row.winner],
             "diff_from_last": diff_r,
@@ -73,15 +71,30 @@ def create_rating_data():
 
         # loser
         new_row = {
-            "id": i + 1,
             "date": row.date,
+            "battle": row.battle,
             "name": row.loser,
             "rating": player_ratings[row.loser],
             "diff_from_last": -diff_r,
         }
         ratings_df.loc[len(ratings_df)] = new_row
 
+    def max_battle(values):
+        return values.iloc[0]
+
+    ratings_df = (
+        ratings_df.sort_values(by="battle", ascending=False)
+        .groupby(by=["date", "name"])
+        .agg(
+            {
+                "rating": max_battle,
+                "diff_from_last": "sum",
+            }
+        )
+        .reset_index()
+    )
+
     ratings_df = ratings_df.sort_values(by=["date", "rating"], ascending=False)
-    ratings_df.to_csv(conf.RATINGS_TSV_PATH, sep="\t", lineterminator="\n")
+    ratings_df.to_csv(conf.RATINGS_TSV_PATH, index=False, sep="\t", lineterminator="\n")
 
     return ratings_df

@@ -40,6 +40,7 @@ export interface BattleRecord {
   SFLStage: number;
   SFLQuarter: number;
   SFLMatch: number;
+  SFLBattle: number;
   isWin: boolean;
   winSetN: number;
   loseSetN: number;
@@ -163,7 +164,7 @@ export class PlayerComponent implements OnInit {
     for (let line of PlayerDatalines) {
       const values = line.split('\t');
       if (values.length == 0) continue;
-      if (values[1] == this.playerName) {
+      if (values[0] == this.playerName) {
         playerDataValues = values;
         break;
       }
@@ -173,13 +174,13 @@ export class PlayerComponent implements OnInit {
     const data: PlayerData = {
       twitterId: playerValues[6],
       charactors: playerValues[7],
-      rank: Math.round(Number(playerDataValues[7])),
-      latestRating: Math.round(Number(playerDataValues[3])),
-      bestRating: Math.round(Number(playerDataValues[4])),
-      worstRating: Math.round(Number(playerDataValues[5])),
-      winRate: Math.round(Number(playerDataValues[10]) * 100),
-      winN: Math.round(Number(playerDataValues[12])),
-      loseN: Math.round(Number(playerDataValues[13])),
+      rank: Math.round(Number(playerDataValues[6])),
+      latestRating: Math.round(Number(playerDataValues[2])),
+      bestRating: Math.round(Number(playerDataValues[3])),
+      worstRating: Math.round(Number(playerDataValues[4])),
+      winRate: Math.round(Number(playerDataValues[9]) * 100),
+      winN: Math.round(Number(playerDataValues[11])),
+      loseN: Math.round(Number(playerDataValues[12])),
     };
     return data;
   }
@@ -192,10 +193,10 @@ export class PlayerComponent implements OnInit {
     for (let line of lines) {
       const values = line.split('\t');
       if (values.length == 0) continue;
-      if (values[3] != this.playerName) continue;
+      if (values[1] != this.playerName) continue;
 
-      const date: string = values[2];
-      const rating: number = Number(values[4]);
+      const date: string = values[0];
+      const rating: number = Number(values[2]);
 
       if (date in dateToRatings) continue;
 
@@ -238,15 +239,15 @@ export class PlayerComponent implements OnInit {
     };
   }
 
-  createWinRateTableData(ratingsTsv: string): WinRateRecord[] {
-    let lines = ratingsTsv.split('\n');
+  createWinRateTableData(playerDataTsv: string): WinRateRecord[] {
+    let lines = playerDataTsv.split('\n');
     lines.shift();
 
     let winRateRecords: WinRateRecord[] = [];
     for (let line of lines) {
       const values = line.split('\t');
       if (values.length < 2) continue;
-      if (values[1] == this.playerName) continue;
+      if (values[0] == this.playerName) continue;
 
       const rating: number = Number(values[3]);
 
@@ -258,7 +259,7 @@ export class PlayerComponent implements OnInit {
       ).toFixed(1);
 
       const wrr: WinRateRecord = {
-        opponentName: values[1],
+        opponentName: values[0],
         opponentRating: rating,
         rateDiff: this.playerData.latestRating - rating,
         winRate: winRate,
@@ -300,6 +301,7 @@ export class PlayerComponent implements OnInit {
         SFLStage: Number(values[0]),
         SFLQuarter: Number(values[1]),
         SFLMatch: Number(values[2]),
+        SFLBattle: Number(values[8]),
         isWin: isWin,
         winSetN: winSetN,
         loseSetN: loseSetN,
@@ -313,7 +315,8 @@ export class PlayerComponent implements OnInit {
     battleRecords.sort((a, b) => {
       if (a.date < b.date) return 1;
       if (a.date > b.date) return -1;
-      return 0;
+      if (a.SFLBattle < b.SFLBattle) return 1;
+      return -1;
     });
 
     return battleRecords;
