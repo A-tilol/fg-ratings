@@ -64,10 +64,12 @@ def calc_rank(player_df, ratings_df):
         latest_ratings["rating"].rank(ascending=False, method="min").astype(int)
     )
 
+    latest_date = ratings_df["date"].max()
     second_latest_ratings = (
-        ratings_df.sort_values(by="date", ascending=False)
+        ratings_df[ratings_df["date"] != latest_date]
+        .sort_values(by="date", ascending=False)
         .groupby("name")
-        .nth(1)
+        .nth(0)
         .reset_index()
     )
     second_latest_ratings["rank"] = (
@@ -160,4 +162,6 @@ def create_player_data(ratings_df):
 
     player_df = player_df.sort_values(by="latest_rating", ascending=False)
 
-    player_df.to_csv(conf.PLAYER_DATA_TSV_PATH, sep="\t", lineterminator="\n")
+    player_df.to_csv(
+        conf.PLAYER_DATA_TSV_PATH, index=False, sep="\t", lineterminator="\n"
+    )
