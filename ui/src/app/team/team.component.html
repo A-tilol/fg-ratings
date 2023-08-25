@@ -1,7 +1,9 @@
 <mat-card style="margin-bottom:10px;">
     <mat-card-header>
         <mat-card-title style="font-size: larger;">SFL2023 チームレートランキング</mat-card-title>
-        <mat-card-subtitle>1stステージ 第6節まで</mat-card-subtitle>
+        <mat-card-subtitle
+            style="background:linear-gradient(transparent 70%, rgba(102, 204, 255, 0.7) 60%); margin-bottom:10px">データ反映：1stステージ
+            第6節まで</mat-card-subtitle>
     </mat-card-header>
 </mat-card>
 
@@ -35,7 +37,7 @@
     <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef> </th>
         <td mat-cell *matCellDef="let element">
-            {{element.name}}
+            <span [style]=utils.updatedStyle(element.isUpdated)>{{element.name}}</span>
             <!-- <a [routerLink]="['/player', element.name]">{{element.name}} </a> -->
         </td>
     </ng-container>
