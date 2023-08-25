@@ -249,7 +249,7 @@ export class PlayerComponent implements OnInit {
       if (values.length < 2) continue;
       if (values[0] == this.playerName) continue;
 
-      const rating: number = Number(values[3]);
+      const rating: number = Number(values[2]);
 
       const winRate = (
         Math.round(
