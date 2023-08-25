@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import * as _utils from '../utils';
 
 export interface PlayerRatingElement {
   rank: number;
@@ -19,6 +20,7 @@ export interface PlayerRatingElement {
   styleUrls: ['./team.component.scss'],
 })
 export class TeamComponent implements OnInit {
+  utils = _utils;
   ratingTableData: PlayerRatingElement[] = [];
   displayedColumns: string[] = [
     'crown',
