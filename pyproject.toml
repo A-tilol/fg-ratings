@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "fg-ratings"
+version = "0.1.0"
+description = ""
+authors = ["atilol <ggrkssk@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+numpy = "^1.25.2"
+pandas = "^2.0.3"
+selenium = "^4.11.2"
+pysmashgg = "^1.2.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
