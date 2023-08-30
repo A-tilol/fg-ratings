@@ -4,6 +4,7 @@
 
 - [x] python環境
 - [ ] Capcom Pro Tour
+- [ ] down, upの矢印
 - [ ] 英語対応
 - [x] OGP(SNSプレビュー)
 - [ ] lazy loading
