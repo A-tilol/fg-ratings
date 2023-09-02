@@ -1,6 +1,7 @@
 #!TODO all results
 
 import conf
+import numpy as np
 import pandas as pd
 
 
@@ -145,6 +146,11 @@ def set_update(player_df):
 
 def add_player_tag_column(player_data_df):
     player_df = pd.read_csv(conf.PLAYER_TSV_PATH, sep="\t")
+
+    # unique playerId, and use laest tag
+    player_df["order"] = np.arange(len(player_df))
+    player_df = player_df.loc[player_df.groupby("playerId")["order"].idxmax()]
+
     players = player_df.to_dict("records")
     playerId2Tag = {}
     for row in players:

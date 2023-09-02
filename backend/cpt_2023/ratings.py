@@ -1,17 +1,18 @@
-"""
+"""1試合ごとのレーティング変動を計算
 """
 
 import conf
+import numpy as np
 import pandas as pd
 
 
 def init_ratings():
-    # TODO: use all event entrants
-    # TODO: use latest tag
-    fpath = "./data/cpt_2023/2023-08-06_evo-2023_entrants.tsv"
-    # tournament_name = fpath.split("/")[-1].split("_")[1]
+    df = pd.read_csv(conf.PLAYER_TSV_PATH, sep="\t")
 
-    df = pd.read_csv(fpath, sep="\t")
+    # unique playerId, and use laest tag
+    df["order"] = np.arange(len(df))
+    df = df.loc[df.groupby("playerId")["order"].idxmax()]
+
     player_ratings = {
         playerId: conf.INITIAL_RATING for playerId in df["playerId"].tolist()
     }
@@ -51,15 +52,9 @@ def calc_diff_rating(winner_rating, loser_rating, diff_sets):
 
 
 def create_rating_data():
-    # TODO all events
-
     player_ratings, ratings_df = init_ratings()
 
-    fpath = "./data/cpt_2023/2023-08-06_evo-2023_sets.tsv"
-
-    # ratings_df.to_csv(conf.RATINGS_TSV_PATH, index=False, sep="\t", lineterminator="\n")
-
-    results_df = pd.read_csv(fpath, sep="\t", lineterminator="\n")
+    results_df = pd.read_csv(conf.RESULTS_TSV_PATH, sep="\t", lineterminator="\n")
 
     rating_rows = []
     for row in results_df.itertuples():
