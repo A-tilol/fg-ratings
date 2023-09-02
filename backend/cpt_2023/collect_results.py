@@ -51,23 +51,6 @@ BRAKET_ORDER = {
     "Top 6": 6,
 }
 
-# def aquire_battle_result(battle_elm, date, stage, section, match, battle):
-#     result = {
-#         "stage": stage,
-#         "quarter": section,
-#         "match": match,
-#         "date": date,
-#         "winner": winner["player_name"],
-#         "loser": loser["player_name"],
-#         "winner_sets": winner["total_wins"],
-#         "loser_sets": loser["total_wins"],
-#         "battle": battle,
-#         "chars_of_winner": ",".join(winner["charactor_names"]),
-#         "chars_of_loser": ",".join(loser["charactor_names"]),
-#     }
-
-#     return result
-
 
 def acquire_entrants_data(tournament_name, date):
     """_summary_
@@ -193,13 +176,14 @@ def acquire_tournament_results(tournament_name, date, sort_type):
         sets_df = sets_df.sort_values(by=["bracketOrder", "bracketId", "roundOrder"])
         sets_df["battle_order"] = np.arange(len(sets_df))
         sets_df["tournament"] = tournament_name
+        sets_df["date"] = date
 
-        if tournament_name == "evo-2023":
-            sets_df["date"] = "2023-08-05"
-            sets_df.loc[
-                sets_df["bracketName"] == "Round 1 Pools", "date"
-            ] = "2023-08-04"
-            sets_df.loc[sets_df["bracketName"] == "Top 6", "date"] = "2023-08-06"
+        # if tournament_name == "evo-2023":
+        #     sets_df["date"] = "2023-08-05"
+        #     sets_df.loc[
+        #         sets_df["bracketName"] == "Round 1 Pools", "date"
+        #     ] = "2023-08-04"
+        #     sets_df.loc[sets_df["bracketName"] == "Top 6", "date"] = "2023-08-06"
 
         sets_df.to_csv(
             out_path,
@@ -339,9 +323,9 @@ def acquire_tournament_results(tournament_name, date, sort_type):
 
 
 if __name__ == "__main__":
-    # acquire_entrants_data("evo-2023", "2023-08-04")
+    # acquire_entrants_data("evo-2023", "2023-08-06")
     # exit()
 
     # 試合結果取得。10000試合までしか取得できないのでsort順を変えて取得
-    # acquire_tournament_results("evo-2023", "2023-08-04", "CALL_ORDER")
-    acquire_tournament_results("evo-2023", "2023-08-04", "RECENT")
+    # acquire_tournament_results("evo-2023", "2023-08-06", "CALL_ORDER")
+    acquire_tournament_results("evo-2023", "2023-08-06", "RECENT")

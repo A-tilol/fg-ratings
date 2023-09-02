@@ -8,7 +8,7 @@ import pandas as pd
 def init_ratings():
     # TODO: use all event entrants
     # TODO: use latest tag
-    fpath = "./data/cpt_2023/2023-08-04_evo-2023_entrants.tsv"
+    fpath = "./data/cpt_2023/2023-08-06_evo-2023_entrants.tsv"
     # tournament_name = fpath.split("/")[-1].split("_")[1]
 
     df = pd.read_csv(fpath, sep="\t")
@@ -27,18 +27,7 @@ def init_ratings():
                 "diff_from_last": 0,
             }
         )
-    ratings_df = pd.DataFrame(
-        data,
-        columns=[
-            "date",
-            "tournament_name",
-            "battle_order",
-            "playerId",
-            "playerTag",
-            "rating",
-            "diff_from_last",
-        ],
-    )
+    ratings_df = pd.DataFrame(data)
 
     return player_ratings, ratings_df
 
@@ -66,12 +55,13 @@ def create_rating_data():
 
     player_ratings, ratings_df = init_ratings()
 
-    fpath = "./data/cpt_2023/2023-08-04_evo-2023_sets.tsv"
+    fpath = "./data/cpt_2023/2023-08-06_evo-2023_sets.tsv"
 
     # ratings_df.to_csv(conf.RATINGS_TSV_PATH, index=False, sep="\t", lineterminator="\n")
 
     results_df = pd.read_csv(fpath, sep="\t", lineterminator="\n")
 
+    rating_rows = []
     for row in results_df.itertuples():
         # get player id, tag
         winer_id, loser_id = row.entrant1playerId, row.entrant2playerId
@@ -103,7 +93,7 @@ def create_rating_data():
             "rating": player_ratings[winer_id],
             "diff_from_last": diff_r,
         }
-        ratings_df.loc[len(ratings_df)] = new_row
+        rating_rows.append(new_row)
 
         # loser
         new_row = {
@@ -113,29 +103,66 @@ def create_rating_data():
             "playerId": loser_id,
             "playerTag": loser_tag,
             "rating": player_ratings[loser_id],
-            "diff_from_last": diff_r,
+            "diff_from_last": -diff_r,
         }
-        ratings_df.loc[len(ratings_df)] = new_row
+        rating_rows.append(new_row)
 
-    def latest_battle(values):
+    r_df = pd.DataFrame(rating_rows)
+    ratings_df = pd.concat([ratings_df, r_df], ignore_index=True)
+
+    def latest(values):
         return values.iloc[0]
 
-    ratings_df = (
-        ratings_df.sort_values(by="battle_order", ascending=False)
+    ratings_sumed_by_date_df = (
+        ratings_df.sort_values(by=["date", "battle_order"], ascending=False)
         .groupby(by=["date", "playerId"])
         .agg(
             {
-                "rating": latest_battle,
+                "tournament": latest,
+                "playerTag": latest,
+                "rating": latest,
                 "diff_from_last": "sum",
             }
         )
         .reset_index()
     )
 
-    ratings_df = ratings_df.sort_values(by=["date", "rating"], ascending=False)
-    ratings_df.to_csv(conf.RATINGS_TSV_PATH, index=False, sep="\t", lineterminator="\n")
+    ratings_df = ratings_df.sort_values(
+        by=["date", "battle_order", "rating"], ascending=False
+    )
+    ratings_sumed_by_date_df = ratings_sumed_by_date_df.sort_values(
+        by=["date", "rating"], ascending=False
+    )
 
-    return ratings_df
+    ratings_df = ratings_df[
+        [
+            "date",
+            "tournament",
+            "playerId",
+            "playerTag",
+            "rating",
+            "diff_from_last",
+        ]
+    ]
+    ratings_sumed_by_date_df = ratings_sumed_by_date_df[
+        [
+            "date",
+            "tournament",
+            "playerId",
+            "playerTag",
+            "rating",
+            "diff_from_last",
+        ]
+    ]
+
+    ratings_df.to_csv(
+        conf.RATINGS_ALL_TSV_PATH, index=False, sep="\t", lineterminator="\n"
+    )
+    ratings_sumed_by_date_df.to_csv(
+        conf.RATINGS_TSV_PATH, index=False, sep="\t", lineterminator="\n"
+    )
+
+    return ratings_sumed_by_date_df
 
 
 if __name__ == "__main__":
