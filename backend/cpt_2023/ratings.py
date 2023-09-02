@@ -9,7 +9,7 @@ def init_ratings():
     # TODO: use all event entrants
     # TODO: use latest tag
     fpath = "./data/cpt_2023/2023-08-04_evo-2023_entrants.tsv"
-    tournament_name = fpath.split("/")[-1].split("_")[1]
+    # tournament_name = fpath.split("/")[-1].split("_")[1]
 
     df = pd.read_csv(fpath, sep="\t")
     player_ratings = {
@@ -17,13 +17,12 @@ def init_ratings():
     }
 
     data = []
-    for playerId, tag in zip(df["playerId"].tolist(), df["tag"].tolist()):
+    for playerId, tag in zip(df["playerId"].tolist(), df["playerTag"].tolist()):
         data.append(
             {
-                "date": "2023-07-01",
-                "tournament_name": tournament_name,
+                "date": "2023-08-01",
                 "playerId": playerId,
-                "entrantTag": tag,
+                "playerTag": tag,
                 "rating": conf.INITIAL_RATING,
                 "diff_from_last": 0,
             }
@@ -33,8 +32,9 @@ def init_ratings():
         columns=[
             "date",
             "tournament_name",
+            "battle_order",
             "playerId",
-            "entrantTag",
+            "playerTag",
             "rating",
             "diff_from_last",
         ],
@@ -51,12 +51,12 @@ def get_scale_factor(n: int) -> float:
     return (n + 11) / 8
 
 
-def calc_diff_rating(winner_rating, loser_rating, winner_sets, loser_sets):
+def calc_diff_rating(winner_rating, loser_rating, diff_sets):
     """
     得失点差を考慮できるWorld Football Elo Ratingを参考
     https://en.wikipedia.org/wiki/World_Football_Elo_Ratings
     """
-    s = get_scale_factor(abs(winner_sets - loser_sets))
+    s = get_scale_factor(diff_sets)
     expect = 1 / (1 + 10 ** ((loser_rating - winner_rating) / 400))
     return round(conf.K * s * (1 - expect))
 
@@ -72,23 +72,35 @@ def create_rating_data():
 
     results_df = pd.read_csv(fpath, sep="\t", lineterminator="\n")
 
-    for i, row in enumerate(results_df.itertuples()):
+    for row in results_df.itertuples():
+        # get player id, tag
+        winer_id, loser_id = row.entrant1playerId, row.entrant2playerId
+        winer_tag, loser_tag = row.entrant1playerTag, row.entrant2playerTag
+        if row.winnerId == row.entrant2Id:
+            winer_id, loser_id = row.entrant2playerId, row.entrant1playerId
+            winer_tag, loser_tag = row.entrant2playerTag, row.entrant1playerTag
+
+        diff_sets = abs(row.entrant1Score - row.entrant2Score)
+        if row.entrant1Score == -1 or row.entrant2Score == -1:
+            diff_sets = 1
+
         diff_r = calc_diff_rating(
-            player_ratings[row.winner],
-            player_ratings[row.loser],
-            row.winner_sets,
-            row.loser_sets,
+            player_ratings[winer_id],
+            player_ratings[loser_id],
+            diff_sets,
         )
 
-        player_ratings[row.winner] += diff_r
-        player_ratings[row.loser] -= diff_r
+        player_ratings[winer_id] += diff_r
+        player_ratings[loser_id] -= diff_r
 
         # winner
         new_row = {
             "date": row.date,
-            "battle": row.battle,
-            "name": row.winner,
-            "rating": player_ratings[row.winner],
+            "tournament": row.tournament,
+            "battle_order": row.battle_order,
+            "playerId": winer_id,
+            "playerTag": winer_tag,
+            "rating": player_ratings[winer_id],
             "diff_from_last": diff_r,
         }
         ratings_df.loc[len(ratings_df)] = new_row
@@ -96,22 +108,24 @@ def create_rating_data():
         # loser
         new_row = {
             "date": row.date,
-            "battle": row.battle,
-            "name": row.loser,
-            "rating": player_ratings[row.loser],
-            "diff_from_last": -diff_r,
+            "tournament": row.tournament,
+            "battle_order": row.battle_order,
+            "playerId": loser_id,
+            "playerTag": loser_tag,
+            "rating": player_ratings[loser_id],
+            "diff_from_last": diff_r,
         }
         ratings_df.loc[len(ratings_df)] = new_row
 
-    def max_battle(values):
+    def latest_battle(values):
         return values.iloc[0]
 
     ratings_df = (
-        ratings_df.sort_values(by="battle", ascending=False)
-        .groupby(by=["date", "name"])
+        ratings_df.sort_values(by="battle_order", ascending=False)
+        .groupby(by=["date", "playerId"])
         .agg(
             {
-                "rating": max_battle,
+                "rating": latest_battle,
                 "diff_from_last": "sum",
             }
         )

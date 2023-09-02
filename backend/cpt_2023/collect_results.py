@@ -14,6 +14,7 @@ import os
 import time
 from pprint import pprint
 
+import numpy as np
 import pandas as pd
 import pysmashgg
 from pysmashgg import filters
@@ -190,6 +191,16 @@ def acquire_tournament_results(tournament_name, date, sort_type):
         sets_df = pd.concat([sets_df, df])
         sets_df = sets_df.drop_duplicates("id")
         sets_df = sets_df.sort_values(by=["bracketOrder", "bracketId", "roundOrder"])
+        sets_df["battle_order"] = np.arange(len(sets_df))
+        sets_df["tournament"] = tournament_name
+
+        if tournament_name == "evo-2023":
+            sets_df["date"] = "2023-08-05"
+            sets_df.loc[
+                sets_df["bracketName"] == "Round 1 Pools", "date"
+            ] = "2023-08-04"
+            sets_df.loc[sets_df["bracketName"] == "Top 6", "date"] = "2023-08-06"
+
         sets_df.to_csv(
             out_path,
             index=False,
@@ -197,6 +208,9 @@ def acquire_tournament_results(tournament_name, date, sort_type):
             lineterminator="\n",
         )
         return sets_df
+
+    save_sets(sets_df, [])
+    exit()
 
     def query_event_sets(event_id, page, perPage, sortType):
         SHOW_SETS_TOTAL_QUERY = """query EventSets($eventId: ID!, $page: Int!, $perPage: Int!, $sortType: SetSortType!) {
@@ -324,30 +338,10 @@ def acquire_tournament_results(tournament_name, date, sort_type):
     sets_df = save_sets(sets_df, event_sets)
 
 
-def cvt_to_battle_result(battle_elm, date, stage, section, match, battle):
-    # id	entrant1Id	entrant2Id	entrant1Name	entrant2Name	entrant1Score	entrant2Score	completed	winnerId	loserId	winnerName	loserName	fullRoundText	bracketName	bracketId	entrant1playerId	entrant1playerTag	entrant1entrantId	entrant2playerId	entrant2playerTag	entrant2entrantId	bracketOrder	roundOrder
-    result = {
-        "tournament_name": stage,
-        "date": date,
-        "" "winner": winner["player_name"],
-        "loser": loser["player_name"],
-        "winner_sets": winner["total_wins"],
-        "loser_sets": loser["total_wins"],
-        "battle": battle,
-        "chars_of_winner": ",".join(winner["charactor_names"]),
-        "chars_of_loser": ",".join(loser["charactor_names"]),
-    }
-
-    return result
-
-
 if __name__ == "__main__":
     # acquire_entrants_data("evo-2023", "2023-08-04")
     # exit()
 
     # 試合結果取得。10000試合までしか取得できないのでsort順を変えて取得
     # acquire_tournament_results("evo-2023", "2023-08-04", "CALL_ORDER")
-    # acquire_tournament_results("evo-2023", "2023-08-04", "RECENT")
-
-    # 試合結果に変換
-    cvt_to_battle_result()
+    acquire_tournament_results("evo-2023", "2023-08-04", "RECENT")
