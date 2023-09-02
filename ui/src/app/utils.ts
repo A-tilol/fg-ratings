@@ -1,6 +1,6 @@
 export class SFL2023 {
   static currentStage = '1st';
-  static currentSection = '8';
+  static currentSection = '9';
 }
 
 export const updatedStyle = (isUpdated: boolean) => {
