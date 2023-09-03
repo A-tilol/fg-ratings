@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CptHomeComponent } from './cpt-home/cpt-home.component';
 import { HomeComponent } from './home/home.component';
 import { PlayerComponent } from './player/player.component';
 import { TeamComponent } from './team/team.component';
@@ -9,6 +10,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'team', component: TeamComponent },
   { path: 'player/:name', component: PlayerComponent },
+  { path: 'cpt-home', component: CptHomeComponent },
   { path: '**', component: HomeComponent },
 ];
 

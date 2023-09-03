@@ -19,9 +19,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { TeamRankingComponent } from './team-ranking/team-ranking.component';
 import { TeamComponent } from './team/team.component';
+import { CptHomeComponent } from './cpt-home/cpt-home.component';
 
 @NgModule({
-  declarations: [AppComponent, PlayerComponent, HomeComponent, TeamRankingComponent, TeamComponent],
+  declarations: [AppComponent, PlayerComponent, HomeComponent, TeamRankingComponent, TeamComponent, CptHomeComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
