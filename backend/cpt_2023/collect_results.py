@@ -14,6 +14,7 @@ import os
 import time
 from pprint import pprint
 
+import conf
 import numpy as np
 import pandas as pd
 import pysmashgg
@@ -53,7 +54,7 @@ BRAKET_ORDER = {
 
 
 def acquire_entrants_data(tournament_name, date):
-    """_summary_
+    """トーナメントの参加者の情報を取得
 
     playerIdはプレイヤー固有のIDであるため別の大会でも同じ
     """
@@ -193,8 +194,8 @@ def acquire_tournament_results(tournament_name, date, sort_type):
         )
         return sets_df
 
-    save_sets(sets_df, [])
-    exit()
+    # save_sets(sets_df, [])
+    # exit()
 
     def query_event_sets(event_id, page, perPage, sortType):
         SHOW_SETS_TOTAL_QUERY = """query EventSets($eventId: ID!, $page: Int!, $perPage: Int!, $sortType: SetSortType!) {
@@ -322,10 +323,152 @@ def acquire_tournament_results(tournament_name, date, sort_type):
     sets_df = save_sets(sets_df, event_sets)
 
 
+def get_country2code():
+    country_df = pd.read_csv("./data/country_code.tsv", sep="\t", lineterminator="\n")
+    return {row["name"]: row["code"] for row in country_df.to_dict("records")}
+
+
+def acquire_users_info():
+    country2code = get_country2code()
+
+    def retrieve_player_info(player_id):
+        QUERY = """query ($playerId: ID!) {
+            player(id: $playerId) {
+                gamerTag
+                user {
+                    location {
+                        countryId
+                        country
+                    }
+                    images {
+                        id
+                        type
+                        width
+                        height
+                        ratio
+                        url
+                    }
+                }
+            }
+        } """
+
+        res = run_query(
+            QUERY,
+            variables={"playerId": player_id},
+            header={"Authorization": "Bearer " + startgg_token},
+            auto_retry=True,
+        )
+        # pprint(res)
+
+        player = {
+            "playerId": player_id,
+            "gamerTag": "",
+            "country": "",
+            "countryCode": "",
+            "imageUrl": "",
+        }
+
+        if res["data"]["player"] is None:
+            return player
+
+        player["gamerTag"] = res["data"]["player"]["gamerTag"]
+
+        if res["data"]["player"]["user"] is None:
+            return player
+
+        if res["data"]["player"]["user"]["location"] is not None:
+            player["country"] = res["data"]["player"]["user"]["location"]["country"]
+            if type(player["country"]) != "str":
+                player["country"] == ""
+            if player["country"] in country2code:
+                player["countryCode"] = country2code[player["country"]]
+
+        if res["data"]["player"]["user"]["images"] is not None:
+            images = res["data"]["player"]["user"]["images"]
+            if len(images) == 0:
+                return player
+            for image in images:
+                if image["type"] == "profile":
+                    player["imageUrl"] = image["url"]
+        return player
+
+    player_df = pd.read_csv(conf.PLAYER_TSV_PATH, sep="\t", lineterminator="\n")
+    player_info_df = pd.read_csv(
+        conf.PLAYER_INFO_TSV_PATH, sep="\t", lineterminator="\n"
+    )
+
+    # まだinfoデータを取得していないプレイヤーのデータを取得する
+    player_ids = set(player_df["playerId"].unique().tolist())
+    exists_player_ids = set(player_info_df["playerId"].unique().tolist())
+    new_player_ids = list(player_ids.difference(exists_player_ids))
+    print("num of new_player_ids", len(new_player_ids))
+
+    players = []
+    for i, player_id in enumerate(new_player_ids):
+        retry = 0
+        while retry < 3:
+            try:
+                time.sleep(0.1)
+                player = retrieve_player_info(int(player_id))
+                players.append(player)
+                break
+            except Exception as e:
+                print(e, "retry", retry, player_id)
+
+        if retry >= 3:
+            break
+
+        if (i + 1) % 20 == 0:
+            print(f"Progress {i+1}/{len(new_player_ids)}")
+
+    df = pd.DataFrame(
+        players,
+        columns=["playerId", "gamerTag", "country", "countryCode", "imageUrl"],
+    )
+    player_info_df = pd.concat([player_info_df, df])
+
+    player_info_df.to_csv(
+        conf.PLAYER_INFO_TSV_PATH, index=False, sep="\t", lineterminator="\n"
+    )
+
+
+def set_and_check_player_country_code():
+    country2code = get_country2code()
+    player_info_df = pd.read_csv(
+        conf.PLAYER_INFO_TSV_PATH, sep="\t", lineterminator="\n"
+    )
+
+    # set code
+    player_info_df["countryCode"] = [
+        country2code[country] if country in country2code else ""
+        for country in player_info_df["country"].tolist()
+    ]
+
+    # 国コードが見つからなかった国名を表示
+    player_info_df = player_info_df.fillna("")
+    df = player_info_df[
+        (player_info_df["country"] != "") & (player_info_df["countryCode"] == "")
+    ]
+    unconvertable_countries = df["country"].unique().tolist()
+    if len(unconvertable_countries) > 0:
+        print("[WARN] The following Countries could not find 'country code'.")
+        pprint(unconvertable_countries)
+
+    player_info_df.to_csv(
+        conf.PLAYER_INFO_TSV_PATH, index=False, sep="\t", lineterminator="\n"
+    )
+
+
 if __name__ == "__main__":
     # acquire_entrants_data("evo-2023", "2023-08-06")
     # exit()
 
+    acquire_users_info()
+    exit()
+
+    set_and_check_player_country_code()
+    exit()
+
     # 試合結果取得。10000試合までしか取得できないのでsort順を変えて取得
     # acquire_tournament_results("evo-2023", "2023-08-06", "CALL_ORDER")
-    acquire_tournament_results("evo-2023", "2023-08-06", "RECENT")
+    # acquire_tournament_results("evo-2023", "2023-08-06", "RECENT")

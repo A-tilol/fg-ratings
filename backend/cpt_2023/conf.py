@@ -3,6 +3,7 @@ INITIAL_RATING = 1500
 
 
 PLAYER_TSV_PATH = "./data/cpt_2023/entrants.tsv"
+PLAYER_INFO_TSV_PATH = "./data/cpt_2023/player_info.tsv"
 RESULTS_TSV_PATH = "./data/cpt_2023/results.tsv"
 RATINGS_TSV_PATH = "./data/cpt_2023/ratings.tsv"
 RATINGS_ALL_TSV_PATH = "./data/cpt_2023/ratings_all.tsv"
