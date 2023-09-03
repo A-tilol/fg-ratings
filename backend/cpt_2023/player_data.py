@@ -163,12 +163,26 @@ def add_player_tag_column(player_data_df):
     return player_data_df
 
 
+def add_player_country_column(player_data_df):
+    player_info_df = pd.read_csv(conf.PLAYER_INFO_TSV_PATH, sep="\t")
+    id2country = {
+        row["playerId"]: row["countryCode"] for row in player_info_df.to_dict("records")
+    }
+
+    player_data_df["country"] = [
+        id2country[player_id] for player_id in player_data_df["playerId"].tolist()
+    ]
+
+    return player_data_df
+
+
 def create_player_data(ratings_df):
     player_df = pd.DataFrame(
         {},
         columns=[
             "playerId",
             "playerTag",
+            "country",
             "last_game_date",
             "latest_rating",
             "best_rating",
@@ -193,6 +207,8 @@ def create_player_data(ratings_df):
     player_df = calc_win_rate(player_df)
 
     player_df = add_player_tag_column(player_df)
+
+    player_df = add_player_country_column(player_df)
 
     player_df = set_update(player_df)
 
