@@ -9,6 +9,7 @@
 import os
 
 import conf
+import pandas as pd
 import player_data
 import ratings
 import team_ratings
@@ -24,11 +25,18 @@ def merge_results():
             results += f.read()
 
     lines = results.split("\n")
-    header = lines[0] + "\n"
-    results = header + results.replace(header, "")
+    header_line = lines[0] + "\n"
+    header = lines[0].split("\t")
+    data = results.replace(header_line, "")
+    data = [row.split("\t") for row in data.split("\n") if bool(row)]
 
-    with open(conf.RESULTS_TSV_PATH, "w", encoding="utf-8", newline="\n") as f:
-        f.write(results)
+    df = pd.DataFrame(data, columns=header)
+    df["stage"] = df["stage"].astype(int)
+    df["quarter"] = df["quarter"].astype(int)
+    df["match"] = df["match"].astype(int)
+    df = df.sort_values(by=["stage", "quarter", "match"])
+
+    df.to_csv(conf.RESULTS_TSV_PATH, index=False, sep="\t", lineterminator="\n")
 
 
 if __name__ == "__main__":

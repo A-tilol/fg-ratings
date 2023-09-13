@@ -9,6 +9,13 @@ BATTLE2POINT = {
     4: 5,
 }
 
+BATTLE2WINPOINT = {
+    1: 1,
+    2: 1,
+    3: 2,
+    4: 1,
+}
+
 
 def create_player2Team():
     player_df = pd.read_csv(conf.PLAYER_TSV_PATH, sep="\t")
@@ -43,10 +50,10 @@ def update_team_date(team_date: dict, row, player2Team: dict, target: str):
 
     team_date[team][row.date]["game_n"] += 1
     if target == "winner":
-        team_date[team][row.date]["win_n"] += 1
+        team_date[team][row.date]["win_n"] += BATTLE2WINPOINT[row.battle]
         team_date[team][row.date]["points"] += BATTLE2POINT[row.battle]
     if target == "loser":
-        team_date[team][row.date]["lose_n"] += 1
+        team_date[team][row.date]["lose_n"] += BATTLE2WINPOINT[row.battle]
 
 
 def init_team_ratings():
@@ -121,9 +128,7 @@ def create_team_results_data():
 
     team_results_df = calc_ratings(team_results_df)
 
-    team_results_df = team_results_df.sort_values(
-        by=["date", "sfl_match"], ascending=[False, True]
-    )
+    team_results_df = team_results_df.sort_values(by=["date", "sfl_match"])
     team_results_df.to_csv(
         conf.TEAM_RESULTS_TSV_PATH, index=False, sep="\t", lineterminator="\n"
     )
