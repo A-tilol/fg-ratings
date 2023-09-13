@@ -3,7 +3,8 @@
 ## V3
 
 - [x] python環境
-- [ ] Capcom Pro Tour
+- [ ] Capcom Pro Tour, evo
+- [ ] Capcom Pro Tour, all events, standing
 - [ ] down, upの矢印
 - [ ] 英語対応
 - [x] OGP(SNSプレビュー)

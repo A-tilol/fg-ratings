@@ -41,6 +41,8 @@ def calc_diff_rating(winner_rating, loser_rating, winner_sets, loser_sets):
     """
     s = get_scale_factor(abs(winner_sets - loser_sets))
     expect = 1 / (1 + 10 ** ((loser_rating - winner_rating) / 400))
+    if winner_sets == loser_sets:
+        return round(conf.K * s * (0.5 - expect))
     return round(conf.K * s * (1 - expect))
 
 

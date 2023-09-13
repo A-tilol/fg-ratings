@@ -114,5 +114,8 @@ if __name__ == "__main__":
     # aquire_section_results(date="2023-08-25", stage=1, section_num=7)
     # aquire_section_results(date="2023-08-29", stage=1, section_num=8)
     aquire_section_results(date="2023-09-01", stage=1, section_num=9)
+    aquire_section_results(date="2023-09-05", stage=1, section_num=10)
+    aquire_section_results(date="2023-09-08", stage=1, section_num=11)
+    aquire_section_results(date="2023-09-12", stage=1, section_num=12)
 
     driver.quit()
