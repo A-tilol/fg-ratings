@@ -1,55 +1,73 @@
 date	sfl_stage	sfl_quarter	sfl_match	name	opponent	game_n	win_n	lose_n	points	rating	rate_diff
-2023-09-01	1	9	1	Saishunkan Sol 熊本	Good 8 Squad	3	2	1	30	1562	15
-2023-09-01	1	9	1	Good 8 Squad	Saishunkan Sol 熊本	3	1	2	10	1501	-15
-2023-09-01	1	9	2	DetonatioN FocusMe	魚群	4	2	2	20	1461	20
-2023-09-01	1	9	2	魚群	DetonatioN FocusMe	4	2	2	25	1505	-20
-2023-09-01	1	9	3	忍ism Gaming	CAG	3	3	0	40	1527	30
-2023-09-01	1	9	3	CAG	忍ism Gaming	3	0	3	0	1495	-30
-2023-08-29	1	8	1	FAV gaming	忍ism Gaming	3	1	2	10	1531	-19
-2023-08-29	1	8	1	忍ism Gaming	FAV gaming	3	2	1	30	1497	19
-2023-08-29	1	8	2	DetonatioN FocusMe	名古屋OJA BODY STAR	3	2	1	30	1441	17
-2023-08-29	1	8	2	名古屋OJA BODY STAR	DetonatioN FocusMe	3	1	2	10	1419	-17
-2023-08-29	1	8	3	広島 TEAM iXA	Saishunkan Sol 熊本	4	2	2	25	1499	20
-2023-08-29	1	8	3	Saishunkan Sol 熊本	広島 TEAM iXA	4	2	2	20	1547	-20
-2023-08-25	1	7	1	魚群	名古屋OJA BODY STAR	3	3	0	40	1525	25
-2023-08-25	1	7	1	名古屋OJA BODY STAR	魚群	3	0	3	0	1436	-25
-2023-08-25	1	7	2	広島 TEAM iXA	Good 8 Squad	3	2	1	30	1479	19
-2023-08-25	1	7	2	Good 8 Squad	広島 TEAM iXA	3	1	2	10	1516	-19
-2023-08-25	1	7	3	FAV gaming	CAG	4	1	3	20	1550	-30
-2023-08-25	1	7	3	CAG	FAV gaming	4	3	1	25	1525	30
-2023-08-22	1	6	1	Saishunkan Sol 熊本	CAG	4	2	2	20	1567	14
-2023-08-22	1	6	1	CAG	Saishunkan Sol 熊本	4	2	2	25	1495	-14
-2023-08-22	1	6	2	Good 8 Squad	DetonatioN FocusMe	3	2	1	30	1535	12
-2023-08-22	1	6	2	DetonatioN FocusMe	Good 8 Squad	3	1	2	10	1424	-12
-2023-08-22	1	6	3	忍ism Gaming	魚群	3	1	2	10	1478	-16
-2023-08-22	1	6	3	魚群	忍ism Gaming	3	2	1	30	1500	16
-2023-08-18	1	5	1	広島 TEAM iXA	忍ism Gaming	4	2	2	25	1460	19
-2023-08-18	1	5	1	忍ism Gaming	広島 TEAM iXA	4	2	2	20	1494	-19
-2023-08-18	1	5	2	Saishunkan Sol 熊本	名古屋OJA BODY STAR	3	2	1	30	1553	13
-2023-08-18	1	5	2	名古屋OJA BODY STAR	Saishunkan Sol 熊本	3	1	2	10	1461	-13
-2023-08-18	1	5	3	FAV gaming	DetonatioN FocusMe	3	2	1	30	1580	11
-2023-08-18	1	5	3	DetonatioN FocusMe	FAV gaming	3	1	2	10	1436	-11
-2023-08-15	1	4	1	CAG	名古屋OJA BODY STAR	3	2	1	30	1509	16
-2023-08-15	1	4	1	名古屋OJA BODY STAR	CAG	3	1	2	10	1474	-16
-2023-08-15	1	4	2	FAV gaming	Good 8 Squad	3	2	1	30	1569	15
-2023-08-15	1	4	2	Good 8 Squad	FAV gaming	3	1	2	10	1523	-15
-2023-08-15	1	4	3	広島 TEAM iXA	魚群	3	1	2	10	1441	-15
-2023-08-15	1	4	3	魚群	広島 TEAM iXA	3	2	1	30	1484	15
-2023-07-18	1	3	1	Good 8 Squad	魚群	3	2	1	30	1538	14
-2023-07-18	1	3	1	魚群	Good 8 Squad	3	1	2	10	1469	-14
-2023-07-18	1	3	2	広島 TEAM iXA	名古屋OJA BODY STAR	3	1	2	10	1456	-16
-2023-07-18	1	3	2	名古屋OJA BODY STAR	広島 TEAM iXA	3	2	1	30	1490	16
-2023-07-18	1	3	3	Saishunkan Sol 熊本	DetonatioN FocusMe	3	3	0	40	1540	24
-2023-07-18	1	3	3	DetonatioN FocusMe	Saishunkan Sol 熊本	3	0	3	0	1447	-24
-2023-07-14	1	2	1	忍ism Gaming	DetonatioN FocusMe	3	3	0	40	1513	29
-2023-07-14	1	2	1	DetonatioN FocusMe	忍ism Gaming	3	0	3	0	1471	-29
-2023-07-14	1	2	2	CAG	魚群	3	2	1	30	1493	17
-2023-07-14	1	2	2	魚群	CAG	3	1	2	10	1483	-17
-2023-07-14	1	2	3	FAV gaming	名古屋OJA BODY STAR	3	3	0	40	1554	26
-2023-07-14	1	2	3	名古屋OJA BODY STAR	FAV gaming	3	0	3	0	1474	-26
-2023-07-07	1	1	1	FAV gaming	広島 TEAM iXA	3	3	0	40	1528	28
-2023-07-07	1	1	1	広島 TEAM iXA	FAV gaming	3	0	3	0	1472	-28
-2023-07-07	1	1	2	忍ism Gaming	Saishunkan Sol 熊本	3	1	2	10	1484	-16
-2023-07-07	1	1	2	Saishunkan Sol 熊本	忍ism Gaming	3	2	1	30	1516	16
-2023-07-07	1	1	3	Good 8 Squad	CAG	4	3	1	25	1524	24
-2023-07-07	1	1	3	CAG	Good 8 Squad	4	1	3	20	1476	-24
+2023-07-07	1	1	1	FAV gaming	広島 TEAM iXA	3	4	0	40	1530	30
+2023-07-07	1	1	1	広島 TEAM iXA	FAV gaming	3	0	4	0	1470	-30
+2023-07-07	1	1	2	忍ism Gaming	Saishunkan Sol 熊本	3	1	3	10	1476	-24
+2023-07-07	1	1	2	Saishunkan Sol 熊本	忍ism Gaming	3	3	1	30	1524	24
+2023-07-07	1	1	3	Good 8 Squad	CAG	4	3	2	25	1516	16
+2023-07-07	1	1	3	CAG	Good 8 Squad	4	2	3	20	1484	-16
+2023-07-14	1	2	1	忍ism Gaming	DetonatioN FocusMe	3	4	0	40	1508	32
+2023-07-14	1	2	1	DetonatioN FocusMe	忍ism Gaming	3	0	4	0	1468	-32
+2023-07-14	1	2	2	CAG	魚群	3	3	1	30	1509	25
+2023-07-14	1	2	2	魚群	CAG	3	1	3	10	1475	-25
+2023-07-14	1	2	3	FAV gaming	名古屋OJA BODY STAR	3	4	0	40	1557	27
+2023-07-14	1	2	3	名古屋OJA BODY STAR	FAV gaming	3	0	4	0	1473	-27
+2023-07-18	1	3	1	Good 8 Squad	魚群	3	3	1	30	1537	21
+2023-07-18	1	3	1	魚群	Good 8 Squad	3	1	3	10	1454	-21
+2023-07-18	1	3	2	広島 TEAM iXA	名古屋OJA BODY STAR	3	1	3	10	1446	-24
+2023-07-18	1	3	2	名古屋OJA BODY STAR	広島 TEAM iXA	3	3	1	30	1497	24
+2023-07-18	1	3	3	Saishunkan Sol 熊本	DetonatioN FocusMe	3	4	0	40	1549	25
+2023-07-18	1	3	3	DetonatioN FocusMe	Saishunkan Sol 熊本	3	0	4	0	1443	-25
+2023-08-15	1	4	1	CAG	名古屋OJA BODY STAR	3	3	1	30	1532	23
+2023-08-15	1	4	1	名古屋OJA BODY STAR	CAG	3	1	3	10	1474	-23
+2023-08-15	1	4	2	FAV gaming	Good 8 Squad	3	3	1	30	1580	23
+2023-08-15	1	4	2	Good 8 Squad	FAV gaming	3	1	3	10	1514	-23
+2023-08-15	1	4	3	広島 TEAM iXA	魚群	3	1	3	10	1423	-23
+2023-08-15	1	4	3	魚群	広島 TEAM iXA	3	3	1	30	1477	23
+2023-08-18	1	5	1	広島 TEAM iXA	忍ism Gaming	4	3	2	25	1443	20
+2023-08-18	1	5	1	忍ism Gaming	広島 TEAM iXA	4	2	3	20	1488	-20
+2023-08-18	1	5	2	Saishunkan Sol 熊本	名古屋OJA BODY STAR	3	3	1	30	1568	19
+2023-08-18	1	5	2	名古屋OJA BODY STAR	Saishunkan Sol 熊本	3	1	3	10	1455	-19
+2023-08-18	1	5	3	FAV gaming	DetonatioN FocusMe	3	3	1	30	1595	15
+2023-08-18	1	5	3	DetonatioN FocusMe	FAV gaming	3	1	3	10	1428	-15
+2023-08-22	1	6	1	Saishunkan Sol 熊本	CAG	4	2	3	20	1550	-18
+2023-08-22	1	6	1	CAG	Saishunkan Sol 熊本	4	3	2	25	1550	18
+2023-08-22	1	6	2	Good 8 Squad	DetonatioN FocusMe	3	3	1	30	1532	18
+2023-08-22	1	6	2	DetonatioN FocusMe	Good 8 Squad	3	1	3	10	1410	-18
+2023-08-22	1	6	3	忍ism Gaming	魚群	3	1	3	10	1463	-25
+2023-08-22	1	6	3	魚群	忍ism Gaming	3	3	1	30	1502	25
+2023-08-25	1	7	1	魚群	名古屋OJA BODY STAR	3	4	0	40	1528	26
+2023-08-25	1	7	1	名古屋OJA BODY STAR	魚群	3	0	4	0	1429	-26
+2023-08-25	1	7	2	広島 TEAM iXA	Good 8 Squad	3	3	1	30	1473	30
+2023-08-25	1	7	2	Good 8 Squad	広島 TEAM iXA	3	1	3	10	1502	-30
+2023-08-25	1	7	3	FAV gaming	CAG	4	2	3	20	1577	-18
+2023-08-25	1	7	3	CAG	FAV gaming	4	3	2	25	1568	18
+2023-08-29	1	8	1	FAV gaming	忍ism Gaming	3	1	3	10	1545	-32
+2023-08-29	1	8	1	忍ism Gaming	FAV gaming	3	3	1	30	1495	32
+2023-08-29	1	8	2	DetonatioN FocusMe	名古屋OJA BODY STAR	3	3	1	30	1435	25
+2023-08-29	1	8	2	名古屋OJA BODY STAR	DetonatioN FocusMe	3	1	3	10	1404	-25
+2023-08-29	1	8	3	広島 TEAM iXA	Saishunkan Sol 熊本	4	3	2	25	1492	19
+2023-08-29	1	8	3	Saishunkan Sol 熊本	広島 TEAM iXA	4	2	3	20	1531	-19
+2023-09-01	1	9	1	Saishunkan Sol 熊本	Good 8 Squad	3	3	1	30	1553	22
+2023-09-01	1	9	1	Good 8 Squad	Saishunkan Sol 熊本	3	1	3	10	1480	-22
+2023-09-01	1	9	2	DetonatioN FocusMe	魚群	4	2	3	20	1423	-12
+2023-09-01	1	9	2	魚群	DetonatioN FocusMe	4	3	2	25	1540	12
+2023-09-01	1	9	3	忍ism Gaming	CAG	3	4	0	40	1531	36
+2023-09-01	1	9	3	CAG	忍ism Gaming	3	0	4	0	1532	-36
+2023-09-05	1	10	1	FAV gaming	魚群	3	0	4	0	1515	-30
+2023-09-05	1	10	1	魚群	FAV gaming	3	4	0	40	1570	30
+2023-09-05	1	10	2	広島 TEAM iXA	CAG	3	0	4	0	1465	-27
+2023-09-05	1	10	2	CAG	広島 TEAM iXA	3	4	0	40	1559	27
+2023-09-05	1	10	3	Good 8 Squad	名古屋OJA BODY STAR	3	1	3	10	1451	-29
+2023-09-05	1	10	3	名古屋OJA BODY STAR	Good 8 Squad	3	3	1	30	1433	29
+2023-09-08	1	11	1	広島 TEAM iXA	DetonatioN FocusMe	3	0	4	0	1431	-34
+2023-09-08	1	11	1	DetonatioN FocusMe	広島 TEAM iXA	3	4	0	40	1457	34
+2023-09-08	1	11	2	忍ism Gaming	名古屋OJA BODY STAR	3	0	4	0	1493	-38
+2023-09-08	1	11	2	名古屋OJA BODY STAR	忍ism Gaming	3	4	0	40	1471	38
+2023-09-08	1	11	3	Saishunkan Sol 熊本	魚群	4	3	2	25	1570	17
+2023-09-08	1	11	3	魚群	Saishunkan Sol 熊本	4	2	3	20	1553	-17
+2023-09-12	1	12	1	CAG	DetonatioN FocusMe	3	1	3	10	1528	-31
+2023-09-12	1	12	1	DetonatioN FocusMe	CAG	3	3	1	30	1488	31
+2023-09-12	1	12	2	FAV gaming	Saishunkan Sol 熊本	3	3	1	30	1543	28
+2023-09-12	1	12	2	Saishunkan Sol 熊本	FAV gaming	3	1	3	10	1542	-28
+2023-09-12	1	12	3	忍ism Gaming	Good 8 Squad	3	4	0	40	1519	26
+2023-09-12	1	12	3	Good 8 Squad	忍ism Gaming	3	0	4	0	1425	-26
