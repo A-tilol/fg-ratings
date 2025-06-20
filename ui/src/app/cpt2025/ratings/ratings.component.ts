@@ -97,7 +97,6 @@ export class RatingsComponent {
     const filePath = 'assets/cpt_2025/player_ratings.tsv';
     return this.loadAssetTsvToJson(filePath).pipe(
       map((playerRatings) => {
-        console.log(playerRatings);
         const idToRating: { [key: string]: Ratings } = {};
         playerRatings.forEach((rating, i) => {
           idToRating[rating.PlayerId] = {
@@ -107,7 +106,6 @@ export class RatingsComponent {
             loseCnt: Number(rating.LoseCnt),
           };
         });
-        console.log(idToRating);
         return idToRating;
       })
     );
@@ -117,7 +115,6 @@ export class RatingsComponent {
     const filePath = 'assets/cpt_2025/all_player.tsv';
     return this.loadAssetTsvToJson(filePath).pipe(
       map((players) => {
-        console.log(players);
         const idToPlayer: { [key: string]: Player } = {};
         for (const player of players) {
           idToPlayer[player.PlayerId] = {
@@ -126,7 +123,6 @@ export class RatingsComponent {
             birthday: player.Birthday,
           };
         }
-        console.log(idToPlayer);
         return idToPlayer;
       })
     );
