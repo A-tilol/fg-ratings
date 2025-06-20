@@ -1,3 +1,4 @@
+import json
 import os
 import time
 
@@ -35,6 +36,8 @@ def get_all_player_ids(placements_tsv_path: str):
 
 
 def fetch_new_players_data(new_player_ids: list) -> list[dict]:
+    country_to_code = json.load("data/country_code.json")
+
     players_data = []
     for i, player_id in enumerate(new_player_ids):
         print(f"プレイヤー {player_id} の情報を取得 ({i+1}/{len(new_player_ids)})")
@@ -53,7 +56,9 @@ def fetch_new_players_data(new_player_ids: list) -> list[dict]:
             {
                 "PlayerId": player_id,
                 "GamerTag": player_data["gamerTag"],
-                "Country": country,
+                "CountryCode": (
+                    country_to_code[country] if country in country_to_code else ""
+                ),
                 "Birthday": birthday,
             }
         )
@@ -88,6 +93,10 @@ def collect_in_tsv(
     new_player_ids = all_player_ids - existing_player_ids
     print(f"{len(new_player_ids)=}")
 
+    if len(new_player_ids) == 0:
+        print("新規プレイヤーがいないため処理を終了します")
+        return
+
     print("プレイヤーデータを所得")
     new_players_data = fetch_new_players_data(list(new_player_ids))
     print(f"{len(new_players_data)=}")
@@ -98,7 +107,7 @@ def collect_in_tsv(
     column_order = [
         "PlayerId",
         "GamerTag",
-        "Country",
+        "CountryCode",
         "Birthday",
     ]
     df_new_player = df_new_player[column_order]
