@@ -9,6 +9,7 @@ export interface PlayerRatingElement {
   rank: number;
   diffRank: string;
   name: string;
+  countryCode: string;
   rating: number;
   diffRating: string;
   winRate: number;
@@ -26,7 +27,7 @@ export interface Ratings {
 
 export interface Player {
   gamerTag: string;
-  country: string;
+  countryCode: string;
   birthday: string;
 }
 
@@ -39,7 +40,7 @@ export class RatingsComponent {
   utils = _utils;
   ratingTableData: MatTableDataSource<PlayerRatingElement> =
     new MatTableDataSource<PlayerRatingElement>([]);
-  displayedColumns: string[] = ['rank', 'name', 'rating', 'winRate'];
+  displayedColumns: string[] = ['rank', 'country', 'name', 'rating', 'winRate'];
   idToRating: { [key: string]: Ratings } = {};
   idToPlayer: { [key: string]: Player } = {};
 
@@ -119,7 +120,7 @@ export class RatingsComponent {
         for (const player of players) {
           idToPlayer[player.PlayerId] = {
             gamerTag: player.GamerTag,
-            country: player.Country,
+            countryCode: player.CountryCode,
             birthday: player.Birthday,
           };
         }
@@ -138,6 +139,7 @@ export class RatingsComponent {
         rank: rating.rank,
         diffRank: '0',
         name: player.gamerTag,
+        countryCode: player.countryCode,
         rating: rating.rating,
         diffRating: '0',
         winRate: Math.round(
@@ -150,5 +152,12 @@ export class RatingsComponent {
     }
     data.sort((a, b) => a.rank - b.rank);
     return data;
+  }
+
+  public getFlagClasses(countryCode: string) {
+    if (Boolean(countryCode)) {
+      return ['flag-icon', `flag-icon-${countryCode}`];
+    }
+    return [];
   }
 }

@@ -2,9 +2,9 @@
 
 ## V3
 
+- [x] 国表示
+- [ ] CPTポイント表示
 - [x] python環境
-- [ ] Capcom Pro Tour, evo
-- [ ] Capcom Pro Tour, all events, standing
 - [ ] down, upの矢印
 - [ ] 英語対応
 - [x] OGP(SNSプレビュー)
@@ -12,9 +12,7 @@
 - [ ] lazy loading
 - [ ] ダークモード
 - [ ] レーティング計算方法
-- [ ] チーム別ページ
 - [ ] 要望受付
-- [ ] SFL2022
 
 ## v2
 
