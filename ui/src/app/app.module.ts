@@ -12,16 +12,25 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { RatingsComponent } from './cpt2025/ratings/ratings.component';
 import { TeamRankingComponent } from './team-ranking/team-ranking.component';
 import { TeamComponent } from './team/team.component';
 
 @NgModule({
-  declarations: [AppComponent, PlayerComponent, HomeComponent, TeamRankingComponent, TeamComponent],
+  declarations: [
+    AppComponent,
+    PlayerComponent,
+    HomeComponent,
+    TeamRankingComponent,
+    TeamComponent,
+    RatingsComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -35,6 +44,7 @@ import { TeamComponent } from './team/team.component';
     MatCardModule,
     NgApexchartsModule,
     MatMenuModule,
+    MatPaginatorModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

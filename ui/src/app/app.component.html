@@ -3,6 +3,9 @@
         <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="router.navigate(['/cpt2025/ratings'])"><mat-icon>trending_up</mat-icon>SF6 CPT
+            2025
+        </button>
         <button mat-menu-item (click)="router.navigate(['/home'])"><mat-icon>trending_up</mat-icon>SFL2023
             個人</button>
         <button mat-menu-item (click)="router.navigate(['/team'])"><mat-icon>trending_up</mat-icon>SFL2023
