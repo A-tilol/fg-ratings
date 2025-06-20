@@ -15,6 +15,8 @@ export interface PlayerRatingElement {
   winRate: number;
   game_n: number;
   win_n: number;
+  cptPoint: number;
+  tournamentWinCnt: number;
   isUpdated: boolean;
 }
 
@@ -31,6 +33,13 @@ export interface Player {
   birthday: string;
 }
 
+export interface Placement {
+  placement: number;
+  cptPoint: number;
+  playerId: string;
+  event: string;
+}
+
 @Component({
   selector: 'app-ratings',
   templateUrl: './ratings.component.html',
@@ -40,9 +49,14 @@ export class RatingsComponent {
   utils = _utils;
   ratingTableData: MatTableDataSource<PlayerRatingElement> =
     new MatTableDataSource<PlayerRatingElement>([]);
-  displayedColumns: string[] = ['rank', 'country', 'name', 'rating', 'winRate'];
-  idToRating: { [key: string]: Ratings } = {};
-  idToPlayer: { [key: string]: Player } = {};
+  displayedColumns: string[] = [
+    'rank',
+    'country',
+    'name',
+    'rating',
+    'winRate',
+    'CPTPoint',
+  ];
 
   constructor(private http: HttpClient) {}
 
@@ -50,15 +64,13 @@ export class RatingsComponent {
 
   ngOnInit(): void {
     forkJoin({
-      ratings: this.loadCpt2025Ratings(),
-      players: this.loadCpt2025Players(),
+      idToRating: this.loadCpt2025Ratings(),
+      idToPlayer: this.loadCpt2025Players(),
+      placements: this.loadCpt2025Placements(),
     }).subscribe({
-      next: ({ ratings, players }) => {
-        this.idToRating = ratings;
-        this.idToPlayer = players;
-
+      next: ({ idToRating, idToPlayer, placements }) => {
         this.ratingTableData = new MatTableDataSource<PlayerRatingElement>(
-          this.createTableData()
+          this.createTableData(idToRating, idToPlayer, placements)
         );
         this.ratingTableData.paginator = this.paginator;
       },
@@ -129,11 +141,52 @@ export class RatingsComponent {
     );
   }
 
-  private createTableData(): PlayerRatingElement[] {
+  public loadCpt2025Placements(): Observable<Placement[]> {
+    const filePath = 'assets/cpt_2025/all_placements.tsv';
+    return this.loadAssetTsvToJson(filePath).pipe(
+      map((placements) => {
+        const data: Placement[] = [];
+        for (const placement of placements) {
+          data.push({
+            placement: Number(placement.FinalPlacement),
+            cptPoint: Number(placement.CPTPoint),
+            event: placement.Event,
+            playerId: placement.PlayerId,
+          });
+        }
+        return data;
+      })
+    );
+  }
+
+  private createTableData(
+    idToRating: { [key: string]: Ratings },
+    idToPlayer: { [key: string]: Player },
+    placements: Placement[]
+  ): PlayerRatingElement[] {
+    // 優勝回数とCPTポイントをプレイヤーごとに集計
+    const tournamentWinCnt: { [key: string]: number } = {};
+    const idToCptPoint: { [key: string]: number } = {};
+    for (const placement of placements) {
+      if (placement.placement === 1) {
+        if (placement.playerId in tournamentWinCnt) {
+          tournamentWinCnt[placement.playerId] += 1;
+        } else {
+          tournamentWinCnt[placement.playerId] = 1;
+        }
+      }
+
+      if (placement.playerId in idToCptPoint) {
+        idToCptPoint[placement.playerId] += placement.cptPoint;
+      } else {
+        idToCptPoint[placement.playerId] = placement.cptPoint;
+      }
+    }
+
     const data: PlayerRatingElement[] = [];
-    for (let playerId of Object.keys(this.idToRating)) {
-      const rating = this.idToRating[playerId];
-      const player = this.idToPlayer[playerId];
+    for (let playerId of Object.keys(idToRating)) {
+      const rating = idToRating[playerId];
+      const player = idToPlayer[playerId];
 
       data.push({
         rank: rating.rank,
@@ -147,6 +200,9 @@ export class RatingsComponent {
         ),
         game_n: rating.winCnt + rating.loseCnt,
         win_n: rating.winCnt,
+        cptPoint: idToCptPoint[playerId],
+        tournamentWinCnt:
+          playerId in tournamentWinCnt ? tournamentWinCnt[playerId] : 0,
         isUpdated: false,
       });
     }
