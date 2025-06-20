@@ -39,7 +39,7 @@ export class RatingsComponent {
   utils = _utils;
   ratingTableData: MatTableDataSource<PlayerRatingElement> =
     new MatTableDataSource<PlayerRatingElement>([]);
-  displayedColumns: string[] = ['crown', 'rank', 'name', 'rating', 'winRate'];
+  displayedColumns: string[] = ['rank', 'name', 'rating', 'winRate'];
   idToRating: { [key: string]: Ratings } = {};
   idToPlayer: { [key: string]: Player } = {};
 

@@ -88,6 +88,10 @@ def collect_in_tsv(
     new_player_ids = all_player_ids - existing_player_ids
     print(f"{len(new_player_ids)=}")
 
+    if len(new_player_ids) == 0:
+        print("新規プレイヤーがいないため処理を終了します")
+        return
+
     print("プレイヤーデータを所得")
     new_players_data = fetch_new_players_data(list(new_player_ids))
     print(f"{len(new_players_data)=}")
