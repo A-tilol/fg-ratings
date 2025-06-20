@@ -4,6 +4,18 @@ import time
 import pandas as pd
 import startgg
 
+PLACE_TO_CPT_POINT = {
+    2: 300,
+    3: 250,
+    4: 200,
+    5: 150,
+    7: 100,
+    9: 50,
+    13: 30,
+    17: 20,
+    25: 10,
+}
+
 # GraphQLクエリ: イベントの参加者と順位を取得
 EVENT_STANDINGS_QUERY = """
 query EventStandings($eventSlug: String!, $page: Int!, $perPage: Int!) {
@@ -104,6 +116,7 @@ def get_all_event_participants_placements(event_slug, event_name, per_page=75):
                         "PlayerId": player["id"],
                         "EntrantName": entrant_node.get("name"),  # 参考: Entrant名
                         "FinalPlacement": placement,  # Noneの場合もあり得る
+                        "CPTPoint": PLACE_TO_CPT_POINT.get(placement, 0),
                     }
                     all_participants_info.append(participant_info)
 
@@ -146,6 +159,7 @@ def collect_placements_in_tsv(
     column_order = [
         "Event",
         "FinalPlacement",
+        "CPTPoint",
         "PlayerId",
         # "entrantName",
     ]

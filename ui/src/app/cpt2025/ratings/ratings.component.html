@@ -1,8 +1,8 @@
 <mat-card style="margin-bottom:10px;">
     <mat-card-header>
-        <mat-card-title style="font-size: larger;">SF6 CPT2025 レートランキング</mat-card-title>
+        <mat-card-title style="font-size: x-large;">SF6 CPT2025 レートランキング</mat-card-title>
         <mat-card-subtitle>
-            <div>以下の大会の対戦成績をもとに集計</div>
+            <div style="padding-top: 1em;">以下の大会のstart.ggの戦績をもとに集計</div>
             <div style="padding-left: 2em;">
                 <li>EVO Japan 2025</li>
                 <li>COMBO BREAKER 2025</li>
@@ -40,6 +40,16 @@
             </td>
         </ng-container>
 
+        <ng-container matColumnDef="country">
+            <th mat-header-cell *matHeaderCellDef style="min-width:20px;"> </th>
+            <td mat-cell *matCellDef="let element" style="min-width:20px;">
+                <span [ngClass]="getFlagClasses(element.countryCode)"></span>
+                <ng-container *ngIf="element.countryCode === ''">
+                    <span style="font-size: 0.7em; color: #888">no data</span>
+                </ng-container>
+            </td>
+        </ng-container>
+
         <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef> Name </th>
             <td mat-cell *matCellDef="let element">
@@ -62,13 +72,6 @@
             </td>
         </ng-container>
 
-        <ng-container matColumnDef="country">
-            <th mat-header-cell *matHeaderCellDef style="min-width:20px;"> </th>
-            <td mat-cell *matCellDef="let element" style="min-width:20px;">
-                <span [ngClass]="getFlagClasses(element.countryCode)"></span>
-            </td>
-        </ng-container>
-
         <ng-container matColumnDef="rating">
             <th mat-header-cell *matHeaderCellDef style="min-width:80px;"> Rating </th>
             <td mat-cell *matCellDef="let element" style="min-width:80px;">
@@ -84,6 +87,17 @@
             <td mat-cell *matCellDef="let element">
                 {{element.winRate}}%
                 <sub style="color: #888; font-size: 0.8 em;">{{element.win_n}}/{{element.game_n}}</sub>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="CPTPoint">
+            <th mat-header-cell *matHeaderCellDef style="min-width:40px;"> Pt. <sub>CPT</sub> </th>
+            <td mat-cell *matCellDef="let element" style="min-width:40px;">
+                <span>{{element.cptPoint}}</span>
+                <ng-container *ngIf="element.tournamentWinCnt > 0">
+                    <span
+                        style="font-size: smaller; font-weight: 500; padding-left:5px">(優勝{{element.tournamentWinCnt}}回)</span>
+                </ng-container>
             </td>
         </ng-container>
 
