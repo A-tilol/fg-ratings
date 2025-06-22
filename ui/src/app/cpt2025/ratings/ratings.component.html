@@ -1,4 +1,4 @@
-<mat-card style="margin-bottom:10px;">
+<mat-card style="margin-bottom:15px;">
     <mat-card-header>
         <mat-card-title style="font-size: x-large;">SF6 CPT2025 レートランキング</mat-card-title>
         <mat-card-subtitle>
@@ -13,21 +13,7 @@
 </mat-card>
 
 <div>
-    <table mat-table [dataSource]="ratingTableData" class="mat-elevation-z8">
-        <ng-container matColumnDef="crown">
-            <th mat-header-cell *matHeaderCellDef style="min-width:40px;max-width:40px;"> </th>
-            <td mat-cell *matCellDef="let element" style="min-width:40px;max-width:40px">
-                <ng-container *ngIf="element.rank == 1">
-                    <img src="assets/icons8-crown-96.png" style="width:100%">
-                </ng-container>
-                <ng-container *ngIf="element.rank == 2">
-                    <img src="assets/icons8-silver-crown-96.png" style="width:100%">
-                </ng-container>
-                <ng-container *ngIf="element.rank == 3">
-                    <img src="assets/icons8-bronze-crown-96.png" style="width:100%">
-                </ng-container>
-            </td>
-        </ng-container>
+    <table mat-table [dataSource]="ratingTableData">
 
         <ng-container matColumnDef="rank">
             <th mat-header-cell *matHeaderCellDef style="min-width:20px;"> </th>
@@ -75,7 +61,7 @@
         <ng-container matColumnDef="rating">
             <th mat-header-cell *matHeaderCellDef style="min-width:80px;"> Rating </th>
             <td mat-cell *matCellDef="let element" style="min-width:80px;">
-                <span style="font-size: 1.1em;">{{element.rating}}</span>
+                <span style="font-size: 1.1em; font-weight: 500;">{{element.rating}}</span>
                 <ng-container *ngIf="element.isUpdated">
                     <sub>({{element.diffRating}})</sub>
                 </ng-container>
