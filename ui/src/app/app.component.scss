@@ -1,0 +1,23 @@
+.content {
+  width: 100%;
+  min-width: 800px;
+}
+
+.page-content {
+  margin: 15px 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .content {
+    width: 100%;
+    min-width: 600px;
+  }
+
+  .page-content {
+    margin: 15px 5px;
+    display: flex;
+  }
+}
