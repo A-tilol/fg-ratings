@@ -12,6 +12,18 @@
     </mat-card-header>
 </mat-card>
 
+<div style="display: flex; justify-content: flex-end;">
+    <mat-form-field style="width: 150px">
+        <mat-label>Country</mat-label>
+        <mat-select [(value)]="selectedCountry" (selectionChange)="changeCountry($event)">
+            <mat-option *ngFor="let co of countries" [value]="co">
+                <span [ngClass]="getFlagClasses(co)" style="padding-left: 5px;"></span>
+                {{co}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+
 <div>
     <table mat-table [dataSource]="ratingTableData">
 
