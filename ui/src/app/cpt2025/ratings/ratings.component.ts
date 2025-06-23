@@ -1,8 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSelectChange } from '@angular/material/select';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, forkJoin, map } from 'rxjs';
+
+import * as _ from 'lodash';
 import * as _utils from '../../utils';
 
 export interface PlayerRatingElement {
@@ -46,6 +49,8 @@ export interface Placement {
   styleUrls: ['./ratings.component.scss'],
 })
 export class RatingsComponent {
+  private tableDataSource: PlayerRatingElement[] = [];
+
   utils = _utils;
   ratingTableData: MatTableDataSource<PlayerRatingElement> =
     new MatTableDataSource<PlayerRatingElement>([]);
@@ -58,6 +63,9 @@ export class RatingsComponent {
     'CPTPoint',
   ];
 
+  countries: string[] = [];
+  selectedCountry = 'All';
+
   constructor(private http: HttpClient) {}
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -69,8 +77,14 @@ export class RatingsComponent {
       placements: this.loadCpt2025Placements(),
     }).subscribe({
       next: ({ idToRating, idToPlayer, placements }) => {
+        this.tableDataSource = this.createTableData(
+          idToRating,
+          idToPlayer,
+          placements
+        );
+        this.countries = this.createCountryList(this.tableDataSource);
         this.ratingTableData = new MatTableDataSource<PlayerRatingElement>(
-          this.createTableData(idToRating, idToPlayer, placements)
+          this.filterTableData()
         );
         this.ratingTableData.paginator = this.paginator;
       },
@@ -159,6 +173,46 @@ export class RatingsComponent {
     );
   }
 
+  private createCountryList(players: PlayerRatingElement[]): string[] {
+    const countryToCnt: { [key: string]: number } = {};
+    for (const player of players) {
+      if (player.countryCode === '') continue;
+      if (player.countryCode in countryToCnt) {
+        countryToCnt[player.countryCode] += 1;
+      } else {
+        countryToCnt[player.countryCode] = 1;
+      }
+    }
+
+    const countries = Object.entries(countryToCnt)
+      .sort((a, b) => b[1] - a[1])
+      .map((v) => v[0].toUpperCase());
+    countries.unshift('All');
+    return countries;
+  }
+
+  private filterTableData(): PlayerRatingElement[] {
+    const ccode = this.selectedCountry.toLowerCase();
+
+    let filtered = this.tableDataSource.filter((player) => {
+      if (ccode == 'all') return true;
+      return player.countryCode === ccode;
+    });
+
+    filtered = _.cloneDeep(filtered);
+
+    filtered.forEach((player, i) => {
+      player.rank = i + 1;
+    });
+
+    return filtered;
+  }
+
+  changeCountry(event: MatSelectChange) {
+    this.selectedCountry = event.value;
+    this.ratingTableData.data = this.filterTableData();
+  }
+
   private createTableData(
     idToRating: { [key: string]: Ratings },
     idToPlayer: { [key: string]: Player },
@@ -212,7 +266,7 @@ export class RatingsComponent {
 
   public getFlagClasses(countryCode: string) {
     if (Boolean(countryCode)) {
-      return ['flag-icon', `flag-icon-${countryCode}`];
+      return ['flag-icon', `flag-icon-${countryCode.toLocaleLowerCase()}`];
     }
     return [];
   }
