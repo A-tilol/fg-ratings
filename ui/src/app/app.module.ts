@@ -24,6 +24,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { RatingsComponent } from './cpt2025/ratings/ratings.component';
 import { TeamRankingComponent } from './team-ranking/team-ranking.component';
 import { TeamComponent } from './team/team.component';
+import { PlayerCpt25Component } from './cpt2025/player-cpt25/player-cpt25.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { TeamComponent } from './team/team.component';
     TeamRankingComponent,
     TeamComponent,
     RatingsComponent,
+    PlayerCpt25Component,
   ],
   imports: [
     BrowserModule,

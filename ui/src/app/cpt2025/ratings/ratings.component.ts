@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 import * as _utils from '../../utils';
 
 export interface PlayerRatingElement {
+  playerId: string;
   rank: number;
   diffRank: string;
   name: string;
@@ -243,6 +244,7 @@ export class RatingsComponent {
       const player = idToPlayer[playerId];
 
       data.push({
+        playerId: playerId,
         rank: rating.rank,
         diffRank: '0',
         name: player.gamerTag,
