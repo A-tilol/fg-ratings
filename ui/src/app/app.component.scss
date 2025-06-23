@@ -1,6 +1,5 @@
 .content {
   width: 100%;
-  min-width: 800px;
 }
 
 .page-content {
@@ -12,8 +11,7 @@
 
 @media (max-width: 600px) {
   .content {
-    width: 100%;
-    min-width: 600px;
+    width: 570px;
   }
 
   .page-content {
