@@ -1,0 +1,15 @@
+.player-data {
+  font-size: 1.1em;
+  font-weight: 500;
+  padding-left: 7px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 20% 40% 1fr;
+  padding: 5px;
+}
+
+.grid-item {
+  text-align: left;
+}
