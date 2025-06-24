@@ -1,6 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { MatTableDataSource } from '@angular/material/table';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -94,7 +96,8 @@ export class PlayerCpt25Component {
     results: [],
   };
 
-  battleRecordTableData: BattleRecord[] = [];
+  battleRecordTableData: MatTableDataSource<BattleRecord> =
+    new MatTableDataSource<BattleRecord>([]);
   displayedColumns: string[] = [
     'date',
     'event',
@@ -136,6 +139,8 @@ export class PlayerCpt25Component {
     };
   }
 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   ngOnInit(): void {
     this.playerId = this.route.snapshot.paramMap.get('id');
     if (this.playerId === null) {
@@ -157,10 +162,10 @@ export class PlayerCpt25Component {
           matches
         );
         this.chartOptions = this.createRatingChartData(matches, idToPlayer);
-        this.battleRecordTableData = this.createBattleRecordData(
-          matches,
-          idToPlayer
+        this.battleRecordTableData = new MatTableDataSource(
+          this.createBattleRecordData(matches, idToPlayer)
         );
+        this.battleRecordTableData.paginator = this.paginator;
       },
       error: (error) => {
         console.error('データロード中にエラーが発生しました:', error);

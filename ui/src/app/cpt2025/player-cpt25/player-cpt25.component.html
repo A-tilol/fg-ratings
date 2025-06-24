@@ -45,14 +45,14 @@
         </mat-card-content>
     </mat-card>
 
-    <div id="chart" style="margin:25px 5px 10px 5px;">
+    <div id="chart" style="margin:25px 5px 5px 5px;">
         <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
             [dataLabels]="chartOptions.dataLabels" [grid]="chartOptions.grid" [stroke]="chartOptions.stroke"
             [title]="chartOptions.title" [tooltip]="chartOptions.tooltip"></apx-chart>
     </div>
 
     <!-- TODO: add opponet ratings, rateDiff -->
-    <mat-card style="margin:25px 5px 10px 5px;">
+    <mat-card style="margin:5px 5px 10px 5px;">
         <mat-card-header>
             <mat-card-title> 戦績 </mat-card-title>
         </mat-card-header>
@@ -116,6 +116,10 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
+
+            <mat-paginator [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons
+                aria-label="Select page of periodic elements" style="margin-top: 3px;">
+            </mat-paginator>
         </mat-card-content>
     </mat-card>
 
