@@ -127,6 +127,8 @@
         </mat-card-content>
     </mat-card>
 
+    <div *ngFor="let match of sortedMatches">{{match.Datetime}} {{match.RateDiff}}</div>
+
     <!-- <div>TODO: 対戦相手、レーティング、勝率、実績</div> -->
     <!-- <mat-card style="margin-top:25px">
         <mat-card-header>
