@@ -29,4 +29,5 @@ export interface Match {
   Player2Score: string;
   Player1Chars: string;
   Player2Chars: string;
+  RateDiff: number;
 }

@@ -54,6 +54,7 @@ def create_rating_data():
     print(f"{len(matches_df)=}")
 
     print("対戦結果データを元にレートを計算")
+    rate_diffs = []
     for row in matches_df.itertuples():
         winer_id, loser_id = row.Player1, row.Player2
         if winer_id not in pid_to_results or loser_id not in pid_to_results:
@@ -79,6 +80,8 @@ def create_rating_data():
         pid_to_results[winer_id]["WinCnt"] += 1
         pid_to_results[loser_id]["LoseCnt"] += 1
 
+        rate_diffs.append(diff_r)
+
     print("レートデータ作成")
     ratings_df = pd.DataFrame(pid_to_results.values())
     ratings_df = ratings_df.sort_values(by=["Rating"], ascending=False)
@@ -96,6 +99,16 @@ def create_rating_data():
     print("レートデータをTSVファイルに出力")
     ratings_df.to_csv(
         "data/cpt_2025/player_ratings.tsv",
+        index=False,
+        sep="\t",
+        lineterminator="\n",
+        encoding="utf-8",
+    )
+
+    print("レート差分をmatchesに付加してTSVファイルに出力")
+    matches_df["RateDiff"] = rate_diffs
+    matches_df.to_csv(
+        "data/cpt_2025/all_matches.tsv",
         index=False,
         sep="\t",
         lineterminator="\n",

@@ -105,6 +105,7 @@ export class AssetLoadService {
             Player2Score: match.Player2Score,
             Player1Chars: match.Player1Chars,
             Player2Chars: match.Player2Chars,
+            RateDiff: Number(match.RateDiff),
           });
         }
         return data;

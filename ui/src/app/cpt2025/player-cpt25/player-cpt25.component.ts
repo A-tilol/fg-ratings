@@ -8,6 +8,7 @@ import {
   ApexGrid,
   ApexStroke,
   ApexTitleSubtitle,
+  ApexTooltip,
   ApexXAxis,
   ChartComponent,
 } from 'ng-apexcharts';
@@ -23,6 +24,7 @@ export type ChartOptions = {
   grid: ApexGrid;
   stroke: ApexStroke;
   title: ApexTitleSubtitle;
+  tooltip: ApexTooltip;
 };
 
 interface Result {
@@ -122,6 +124,7 @@ export class PlayerCpt25Component {
       title: {},
       grid: {},
       xaxis: {},
+      tooltip: {},
     };
   }
 
@@ -145,6 +148,7 @@ export class PlayerCpt25Component {
           placements,
           matches
         );
+        this.chartOptions = this.createRatingChartData(matches, idToPlayer);
       },
       error: (error) => {
         console.error('データロード中にエラーが発生しました:', error);
@@ -215,132 +219,106 @@ export class PlayerCpt25Component {
     return data;
   }
 
-  // ngOnInit(): void {
-  //   this.playerName = this.route.snapshot.paramMap.get('name');
+  createRatingChartData(
+    matches: Match[],
+    idToPlayer: { [key: string]: Player }
+  ): ChartOptions {
+    matches.sort(
+      (a, b) => new Date(a.Datetime).getTime() - new Date(b.Datetime).getTime()
+    );
 
-  //   this.http
-  //     .get('assets/sfl_2023/players.tsv', { responseType: 'text' })
-  //     .subscribe((playerTsv) => {
-  //       this.http
-  //         .get('assets/sfl_2023/player_data.tsv', { responseType: 'text' })
-  //         .subscribe((playerDataTsv) => {
-  //           this.playerData = this.loadPlayerData(playerTsv, playerDataTsv);
-  //           console.log(this.playerData);
+    let currentRating = 1500;
+    let ratings = [currentRating];
+    for (let match of matches) {
+      if (match.Player1 === this.playerId) {
+        currentRating += match.RateDiff;
+      } else {
+        currentRating -= match.RateDiff;
+      }
+      ratings.push(currentRating);
+    }
 
-  //           this.winRateTableData = this.createWinRateTableData(playerDataTsv);
-  //           console.log(this.winRateTableData);
-  //         });
-  //     });
-
-  //   this.http
-  //     .get('assets/sfl_2023/ratings.tsv', { responseType: 'text' })
-  //     .subscribe((ratingsTsv) => {
-  //       this.chartOptions = this.createRatingChartData(ratingsTsv);
-  //       console.log(this.chartOptions);
-  //     });
-
-  //   this.http
-  //     .get('assets/sfl_2023/results.tsv', { responseType: 'text' })
-  //     .subscribe((resultsTsv) => {
-  //       this.battleRecordTableData = this.createBattleRecordData(resultsTsv);
-  //       console.log(this.battleRecordTableData);
-  //     });
-  // }
-
-  // loadPlayerData(playerTsv: string, playerDataTsv: string): PlayerData {
-  //   let playerLines = playerTsv.split('\n');
-  //   playerLines.shift();
-  //   let playerValues: string[] = [];
-  //   for (let line of playerLines) {
-  //     const values = line.split('\t');
-  //     if (values.length == 0) continue;
-  //     if (values[0] == this.playerName) {
-  //       playerValues = values;
-  //       break;
-  //     }
-  //   }
-  //   console.assert(playerValues.length > 0);
-
-  //   let PlayerDatalines = playerDataTsv.split('\n');
-  //   PlayerDatalines.shift();
-  //   let playerDataValues: string[] = [];
-  //   for (let line of PlayerDatalines) {
-  //     const values = line.split('\t');
-  //     if (values.length == 0) continue;
-  //     if (values[0] == this.playerName) {
-  //       playerDataValues = values;
-  //       break;
-  //     }
-  //   }
-  //   console.assert(playerDataValues.length > 0);
-
-  //   const data: PlayerData = {
-  //     twitterId: playerValues[6],
-  //     charactors: playerValues[7],
-  //     rank: Math.round(Number(playerDataValues[6])),
-  //     latestRating: Math.round(Number(playerDataValues[2])),
-  //     bestRating: Math.round(Number(playerDataValues[3])),
-  //     worstRating: Math.round(Number(playerDataValues[4])),
-  //     winRate: Math.round(Number(playerDataValues[9]) * 100),
-  //     winN: Math.round(Number(playerDataValues[11])),
-  //     loseN: Math.round(Number(playerDataValues[12])),
-  //   };
-  //   return data;
-  // }
-
-  // createRatingChartData(ratingsTsv: string): ChartOptions {
-  //   let lines = ratingsTsv.split('\n');
-  //   lines.shift();
-
-  //   let dateToRatings: { [key: string]: number } = {};
-  //   for (let line of lines) {
-  //     const values = line.split('\t');
-  //     if (values.length == 0) continue;
-  //     if (values[1] != this.playerName) continue;
-
-  //     const date: string = values[0];
-  //     const rating: number = Number(values[2]);
-
-  //     if (date in dateToRatings) continue;
-
-  //     dateToRatings[date] = rating;
-  //   }
-
-  //   return {
-  //     series: [
-  //       {
-  //         name: 'レーティング',
-  //         data: Object.values(dateToRatings).reverse(),
-  //       },
-  //     ],
-  //     chart: {
-  //       height: 350,
-  //       type: 'line',
-  //       zoom: {
-  //         enabled: false,
-  //       },
-  //     },
-  //     dataLabels: {
-  //       enabled: true,
-  //     },
-  //     stroke: {
-  //       curve: 'straight',
-  //     },
-  //     title: {
-  //       text: 'レーティング推移',
-  //       align: 'left',
-  //     },
-  //     grid: {
-  //       row: {
-  //         colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-  //         opacity: 0.5,
-  //       },
-  //     },
-  //     xaxis: {
-  //       categories: Object.keys(dateToRatings).reverse(),
-  //     },
-  //   };
-  // }
+    return {
+      series: [
+        {
+          name: 'レーティング',
+          data: ratings,
+        },
+      ],
+      chart: {
+        height: 350,
+        type: 'line',
+        zoom: {
+          enabled: false,
+        },
+      },
+      dataLabels: {
+        enabled: true,
+        offsetY: -5,
+        formatter: (val: string | number, opts: any) => {
+          // opts.dataPointIndex は現在のデータポイントのインデックスです
+          if (
+            opts.dataPointIndex % 10 === 0 ||
+            opts.dataPointIndex === ratings.length - 1
+          ) {
+            return val;
+          } else {
+            return ''; // または null を返して非表示にする
+          }
+        },
+      },
+      stroke: {
+        curve: 'smooth',
+        width: 3,
+      },
+      title: {
+        text: 'レーティング推移',
+        align: 'left',
+      },
+      grid: {
+        row: {
+          colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+          opacity: 0.5,
+        },
+      },
+      xaxis: {
+        categories: [...new Array(ratings.length).keys()],
+        labels: {
+          formatter: function (val: string, timestamp: number, opts: any) {
+            if (Number(val) % 5 === 0) return val;
+            else return '';
+          },
+        },
+      },
+      tooltip: {
+        x: {
+          formatter: (val: number) => {
+            return `通算${val}試合目`;
+          },
+        },
+        y: {
+          formatter: (val: number, opts) => {
+            const match = matches[opts.dataPointIndex - 1];
+            const sign = match.Player1 === this.playerId ? '+' : '-';
+            return (
+              `${val} (${sign}${match.RateDiff})<br><br>` +
+              `${match.Event}<br>` +
+              `${match.Bracket} ${match.Round}<br>` +
+              `${idToPlayer[match.Player1].gamerTag} VS ${
+                idToPlayer[match.Player2].gamerTag
+              }`
+            );
+          },
+          title: {
+            formatter: (series) => {
+              console.log(series);
+              return '';
+            },
+          },
+        },
+      },
+    };
+  }
 
   // createWinRateTableData(playerDataTsv: string): WinRateRecord[] {
   //   let lines = playerDataTsv.split('\n');
