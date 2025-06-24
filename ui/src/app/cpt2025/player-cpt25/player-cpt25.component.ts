@@ -50,6 +50,7 @@ export interface PlayerData {
 }
 
 export interface BattleRecord {
+  year: string;
   date: string;
   event: string;
   bracket: string;
@@ -364,7 +365,8 @@ export class PlayerCpt25Component {
       if (isNaN(Number(loseSet))) loseSet = 'L';
 
       data.push({
-        date: match.Datetime.slice(0, 10),
+        year: match.Datetime.slice(0, 4),
+        date: match.Datetime.slice(5, 10).replace('-', '/'),
         event: match.Event,
         bracket: match.Bracket,
         round: match.Round,
