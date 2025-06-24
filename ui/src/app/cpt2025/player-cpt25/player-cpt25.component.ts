@@ -1,6 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { MatTableDataSource } from '@angular/material/table';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -48,17 +50,19 @@ export interface PlayerData {
 }
 
 export interface BattleRecord {
+  year: string;
   date: string;
-  SFLStage: number;
-  SFLQuarter: number;
-  SFLMatch: number;
-  SFLBattle: number;
+  event: string;
+  bracket: string;
+  round: string;
   isWin: boolean;
-  winSetN: number;
-  loseSetN: number;
-  opponentName: string;
-  opponentRating?: number;
-  ratingDiff?: number;
+  winSetN: string;
+  loseSetN: string;
+  playerTag: string;
+  opponenTag: string;
+  opponenId: string;
+  rating: number;
+  ratingDiff: number;
 }
 
 export interface WinRateRecord {
@@ -93,8 +97,16 @@ export class PlayerCpt25Component {
     results: [],
   };
 
-  battleRecordTableData: BattleRecord[] = [];
-  displayedColumns: string[] = ['date', 'SFLMatchName', 'result', 'opponent'];
+  battleRecordTableData: MatTableDataSource<BattleRecord> =
+    new MatTableDataSource<BattleRecord>([]);
+  displayedColumns: string[] = [
+    'date',
+    'event',
+    // 'round',
+    'score',
+    'opponent',
+    'rating',
+  ];
 
   winRateTableData: WinRateRecord[] = [];
   winRateTableColumns: string[] = [
@@ -128,6 +140,8 @@ export class PlayerCpt25Component {
     };
   }
 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   ngOnInit(): void {
     this.playerId = this.route.snapshot.paramMap.get('id');
     if (this.playerId === null) {
@@ -149,6 +163,10 @@ export class PlayerCpt25Component {
           matches
         );
         this.chartOptions = this.createRatingChartData(matches, idToPlayer);
+        this.battleRecordTableData = new MatTableDataSource(
+          this.createBattleRecordData(matches, idToPlayer)
+        );
+        this.battleRecordTableData.paginator = this.paginator;
       },
       error: (error) => {
         console.error('データロード中にエラーが発生しました:', error);
@@ -311,7 +329,6 @@ export class PlayerCpt25Component {
           },
           title: {
             formatter: (series) => {
-              console.log(series);
               return '';
             },
           },
@@ -320,99 +337,62 @@ export class PlayerCpt25Component {
     };
   }
 
-  // createWinRateTableData(playerDataTsv: string): WinRateRecord[] {
-  //   let lines = playerDataTsv.split('\n');
-  //   lines.shift();
+  createBattleRecordData(
+    matches: Match[],
+    idToPlayer: { [key: string]: Player }
+  ): BattleRecord[] {
+    if (this.playerId === null) return [];
 
-  //   let winRateRecords: WinRateRecord[] = [];
-  //   for (let line of lines) {
-  //     const values = line.split('\t');
-  //     if (values.length < 2) continue;
-  //     if (values[0] == this.playerName) continue;
+    matches.sort(
+      (a, b) => new Date(a.Datetime).getTime() - new Date(b.Datetime).getTime()
+    );
 
-  //     const rating: number = Number(values[2]);
+    let currentRating = 1500;
+    const data: BattleRecord[] = [];
+    for (const match of matches) {
+      const ratingDiff =
+        match.Player1 === this.playerId ? match.RateDiff : -match.RateDiff;
+      currentRating += ratingDiff;
+      let winSet =
+        match.Player1 === this.playerId
+          ? match.Player1Score
+          : match.Player2Score;
+      let loseSet =
+        match.Player1 === this.playerId
+          ? match.Player2Score
+          : match.Player1Score;
+      if (isNaN(Number(winSet))) winSet = 'W';
+      if (isNaN(Number(loseSet))) loseSet = 'L';
 
-  //     const winRate = (
-  //       Math.round(
-  //         (1 / (1 + 10 ** ((rating - this.playerData.latestRating) / 400))) *
-  //           1000
-  //       ) / 10
-  //     ).toFixed(1);
+      data.push({
+        year: match.Datetime.slice(0, 4),
+        date: match.Datetime.slice(5, 10).replace('-', '/'),
+        event: match.Event,
+        bracket: match.Bracket,
+        round: match.Round,
+        isWin: match.Player1 === this.playerId,
+        winSetN: winSet,
+        loseSetN: loseSet,
+        playerTag: idToPlayer[this.playerId].gamerTag,
+        opponenTag:
+          idToPlayer[
+            match.Player1 === this.playerId ? match.Player2 : match.Player1
+          ].gamerTag,
+        opponenId:
+          match.Player1 === this.playerId ? match.Player2 : match.Player1,
+        rating: currentRating,
+        ratingDiff: Math.abs(ratingDiff),
+      });
+    }
 
-  //     const wrr: WinRateRecord = {
-  //       opponentName: values[0],
-  //       opponentRating: rating,
-  //       rateDiff: this.playerData.latestRating - rating,
-  //       winRate: winRate,
-  //     };
-  //     winRateRecords.push(wrr);
-  //   }
+    return data.reverse();
+  }
 
-  //   return winRateRecords;
-  // }
-
-  // createBattleRecordData(resultsTsv: string): BattleRecord[] {
-  //   let lines = resultsTsv.split('\n');
-  //   lines.shift();
-
-  //   let battleRecords = [];
-  //   for (let line of lines) {
-  //     const values = line.split('\t');
-  //     if (values.length == 0) continue;
-
-  //     const winner = values[4];
-  //     const loser = values[5];
-  //     if (winner != this.playerName && loser != this.playerName) continue;
-
-  //     const isWin = this.playerName == winner;
-
-  //     let winSetN, loseSetN, opponentName;
-  //     if (isWin) {
-  //       winSetN = Number(values[6]);
-  //       loseSetN = Number(values[7]);
-  //       opponentName = loser;
-  //     } else {
-  //       winSetN = Number(values[7]);
-  //       loseSetN = Number(values[6]);
-  //       opponentName = winner;
-  //     }
-
-  //     const br: BattleRecord = {
-  //       date: values[3],
-  //       SFLStage: Number(values[0]),
-  //       SFLQuarter: Number(values[1]),
-  //       SFLMatch: Number(values[2]),
-  //       SFLBattle: Number(values[8]),
-  //       isWin: isWin,
-  //       winSetN: winSetN,
-  //       loseSetN: loseSetN,
-  //       opponentName: opponentName,
-  //       // opponentRating?:,
-  //       // ratingDiff?:,
-  //     };
-  //     battleRecords.push(br);
-  //   }
-
-  //   battleRecords.sort((a, b) => {
-  //     if (a.date < b.date) return 1;
-  //     if (a.date > b.date) return -1;
-  //     if (a.SFLBattle < b.SFLBattle) return 1;
-  //     return -1;
-  //   });
-
-  //   return battleRecords;
-  // }
-
-  // openTwitter() {
-  //   const url = `https://twitter.com/${this.playerData.twitterId}`;
-  //   window.open(url, '_blank');
-  // }
-
-  // navigateToPlayerComponent(playerName: string) {
-  //   this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-  //     this.router.navigate(['/player', playerName]);
-  //   });
-  // }
+  navigateToPlayerComponent(playerId: string) {
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['cpt2025/player/', playerId]);
+    });
+  }
 
   // getWinrateColor(winRate: string) {
   //   const wrate = Number(winRate);

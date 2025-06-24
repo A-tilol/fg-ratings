@@ -45,44 +45,42 @@
         </mat-card-content>
     </mat-card>
 
-    <div id="chart" style="margin-top: 25px;">
+    <div id="chart" style="margin:25px 5px 5px 5px;">
         <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
             [dataLabels]="chartOptions.dataLabels" [grid]="chartOptions.grid" [stroke]="chartOptions.stroke"
             [title]="chartOptions.title" [tooltip]="chartOptions.tooltip"></apx-chart>
     </div>
 
     <!-- TODO: add opponet ratings, rateDiff -->
-    <!-- <mat-card style="margin-top:20px">
+    <mat-card style="margin:5px 5px 10px 5px;">
         <mat-card-header>
             <mat-card-title> 戦績 </mat-card-title>
         </mat-card-header>
         <mat-card-content style="margin-top:10px">
-            <table mat-table [dataSource]="battleRecordTableData" class="mat-elevation-z8">
+            <table mat-table [dataSource]="battleRecordTableData" class="mat-elevation-z8" style="font-size:0.8em">
                 <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef style="min-width:90px;"></th>
-                    <td mat-cell *matCellDef="let element" style="min-width:90px;">
-                        {{element.date}}
+                    <th mat-header-cell *matHeaderCellDef style="min-width:50px;"></th>
+                    <td mat-cell *matCellDef="let element"
+                        style="min-width:50px; font-size: smaller; text-align: center;">
+                        <div style="color:#555">{{element.year}}</div>
+                        <div>{{element.date}}</div>
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="SFLMatchName">
-                    <th mat-header-cell *matHeaderCellDef style="min-width:100px;"> 試合 </th>
-                    <td mat-cell *matCellDef="let element" style="min-width:100px;">
-                        {{element.SFLStage}}st {{element.SFLQuarter}}節
+                <ng-container matColumnDef="event">
+                    <th mat-header-cell *matHeaderCellDef style="min-width:60px;"> 大会 </th>
+                    <td mat-cell *matCellDef="let element" style="min-width:60px;">
+                        {{element.event}}
+                        <div style="color: #777; font-size: x-small; line-height: 1.0;">
+                            <div>{{element.bracket}}</div>
+                            <div>{{element.round}}</div>
+                        </div>
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="opponent">
-                    <th mat-header-cell *matHeaderCellDef style="min-width:100px;"> 対戦相手 </th>
-                    <td mat-cell *matCellDef="let element" style="min-width:100px;">
-                        <button mat-flat-button
-                            (click)="navigateToPlayerComponent(element.opponentName)">{{element.opponentName}}</button>
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="result">
-                    <th mat-header-cell *matHeaderCellDef style="min-width:50px;"> 勝敗 </th>
-                    <td mat-cell *matCellDef="let element" style="min-width:50px;">
+                <ng-container matColumnDef="score">
+                    <th mat-header-cell *matHeaderCellDef style="min-width:40px;"> スコア </th>
+                    <td mat-cell *matCellDef="let element" style="min-width:40px;">
                         <ng-container *ngIf="element.isWin; else loseTag"><span
                                 style="color:red;font-weight:bold;">◯</span></ng-container>
                         <ng-template #loseTag><span style="color:blue;font-weight:bold;">✕</span></ng-template>
@@ -91,11 +89,41 @@
                     </td>
                 </ng-container>
 
+                <ng-container matColumnDef="opponent">
+                    <th mat-header-cell *matHeaderCellDef style="min-width:40px;"> 対戦相手 </th>
+                    <td mat-cell *matCellDef="let element" style="max-width:150px;">
+                        <button mat-stroked-button
+                            (click)="navigateToPlayerComponent(element.opponenId)">{{element.opponenTag}}</button>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="rating">
+                    <th mat-header-cell *matHeaderCellDef style="min-width:80px;"> レート </th>
+                    <td mat-cell *matCellDef="let element" style="min-width:80px; font-weight: 500">
+                        <div>{{element.rating}}</div>
+                        <div [ngStyle]="element.isWin ? {'color': '#28A745'} : {'color': '#F44336'}">
+                            <ng-container *ngIf="element.isWin; else loseTag">
+                                <span class="material-icons"
+                                    style="font-size: small; vertical-align: middle;">keyboard_double_arrow_up</span>
+                            </ng-container>
+                            <ng-template #loseTag>
+                                <span class="material-icons"
+                                    style="font-size: small; vertical-align: middle;">keyboard_double_arrow_down</span>
+                            </ng-template>
+                            {{element.ratingDiff}}
+                        </div>
+                    </td>
+                </ng-container>
+
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
+
+            <mat-paginator [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons
+                aria-label="Select page of periodic elements" style="margin-top: 3px;">
+            </mat-paginator>
         </mat-card-content>
-    </mat-card> -->
+    </mat-card>
 
     <!-- <div>TODO: 対戦相手、レーティング、勝率、実績</div> -->
     <!-- <mat-card style="margin-top:25px">
