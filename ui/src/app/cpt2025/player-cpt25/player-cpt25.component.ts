@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -9,11 +8,13 @@ import {
   ApexGrid,
   ApexStroke,
   ApexTitleSubtitle,
+  ApexTooltip,
   ApexXAxis,
   ChartComponent,
 } from 'ng-apexcharts';
-import { forkJoin, map, Observable } from 'rxjs';
-import { Placement, Player, Ratings } from '../ratings/ratings.component';
+import { forkJoin } from 'rxjs';
+import { AssetLoadService } from '../asset-load.service';
+import { Match, Placement, Player, Ratings } from '../interfaces';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -23,6 +24,7 @@ export type ChartOptions = {
   grid: ApexGrid;
   stroke: ApexStroke;
   title: ApexTitleSubtitle;
+  tooltip: ApexTooltip;
 };
 
 interface Result {
@@ -66,19 +68,6 @@ export interface WinRateRecord {
   winRate: string;
 }
 
-interface Match {
-  Datetime: string;
-  Event: string;
-  Bracket: string;
-  Round: string;
-  Player1: string;
-  Player2: string;
-  Player1Score: string;
-  Player2Score: string;
-  Player1Chars: string;
-  Player2Chars: string;
-}
-
 @Component({
   selector: 'app-player-cpt25',
   templateUrl: './player-cpt25.component.html',
@@ -118,7 +107,7 @@ export class PlayerCpt25Component {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private http: HttpClient
+    private assetLoadService: AssetLoadService
   ) {
     this.chartOptions = {
       series: [
@@ -135,123 +124,22 @@ export class PlayerCpt25Component {
       title: {},
       grid: {},
       xaxis: {},
+      tooltip: {},
     };
-  }
-
-  public loadAssetTsvToJson(filePath: string): Observable<any[]> {
-    return this.http.get(filePath, { responseType: 'text' }).pipe(
-      map((tsvData) => {
-        const lines = tsvData.split('\n');
-        const headers = lines[0].split('\t');
-        lines.shift();
-
-        const data = [];
-        for (const line of lines) {
-          if (line === '') continue;
-          const values = line.split('\t');
-          const d: { [key: string]: any } = {};
-          headers.forEach((colName, i) => {
-            d[colName] = values[i];
-          });
-          data.push(d);
-        }
-
-        return data;
-      })
-    );
-  }
-
-  public loadCpt2025Ratings(): Observable<{ [key: string]: Ratings }> {
-    const filePath = 'assets/cpt_2025/player_ratings.tsv';
-    return this.loadAssetTsvToJson(filePath).pipe(
-      map((playerRatings) => {
-        const idToRating: { [key: string]: Ratings } = {};
-        playerRatings.forEach((rating, i) => {
-          idToRating[rating.PlayerId] = {
-            rank: i + 1,
-            rating: Number(rating.Rating),
-            winCnt: Number(rating.WinCnt),
-            loseCnt: Number(rating.LoseCnt),
-          };
-        });
-        return idToRating;
-      })
-    );
-  }
-
-  public loadCpt2025Players(): Observable<{ [key: string]: Player }> {
-    const filePath = 'assets/cpt_2025/all_player.tsv';
-    return this.loadAssetTsvToJson(filePath).pipe(
-      map((players) => {
-        const idToPlayer: { [key: string]: Player } = {};
-        for (const player of players) {
-          idToPlayer[player.PlayerId] = {
-            gamerTag: player.GamerTag,
-            countryCode: player.CountryCode,
-            birthday: player.Birthday,
-          };
-        }
-        return idToPlayer;
-      })
-    );
-  }
-
-  public loadCpt2025Placements(): Observable<Placement[]> {
-    const filePath = 'assets/cpt_2025/all_placements.tsv';
-    return this.loadAssetTsvToJson(filePath).pipe(
-      map((placements) => {
-        const data: Placement[] = [];
-        for (const placement of placements) {
-          data.push({
-            placement: Number(placement.FinalPlacement),
-            cptPoint: Number(placement.CPTPoint),
-            event: placement.Event,
-            playerId: placement.PlayerId,
-          });
-        }
-        return data;
-      })
-    );
-  }
-
-  public loadCpt2025Matches(): Observable<Match[]> {
-    const filePath = 'assets/cpt_2025/all_matches.tsv';
-    return this.loadAssetTsvToJson(filePath).pipe(
-      map((matches) => {
-        const data: Match[] = [];
-        for (const match of matches) {
-          if (
-            match.Player1 !== this.playerId &&
-            match.Player2 !== this.playerId
-          )
-            continue;
-
-          data.push({
-            Datetime: match['Datetime(UTC)'],
-            Event: match.Event,
-            Bracket: match.Bracket,
-            Round: match.Round,
-            Player1: match.Player1,
-            Player2: match.Player2,
-            Player1Score: match.Player1Score,
-            Player2Score: match.Player2Score,
-            Player1Chars: match.Player1Chars,
-            Player2Chars: match.Player2Chars,
-          });
-        }
-        return data;
-      })
-    );
   }
 
   ngOnInit(): void {
     this.playerId = this.route.snapshot.paramMap.get('id');
+    if (this.playerId === null) {
+      console.error('playerIdが取得できませんでした。');
+      return;
+    }
 
     forkJoin({
-      idToRating: this.loadCpt2025Ratings(),
-      idToPlayer: this.loadCpt2025Players(),
-      placements: this.loadCpt2025Placements(),
-      matches: this.loadCpt2025Matches(),
+      idToRating: this.assetLoadService.loadCpt2025Ratings(),
+      idToPlayer: this.assetLoadService.loadCpt2025Players(),
+      placements: this.assetLoadService.loadCpt2025Placements(),
+      matches: this.assetLoadService.loadCpt2025Matches(this.playerId),
     }).subscribe({
       next: ({ idToRating, idToPlayer, placements, matches }) => {
         this.playerData = this.createPlayerData(
@@ -260,6 +148,7 @@ export class PlayerCpt25Component {
           placements,
           matches
         );
+        this.chartOptions = this.createRatingChartData(matches, idToPlayer);
       },
       error: (error) => {
         console.error('データロード中にエラーが発生しました:', error);
@@ -330,132 +219,106 @@ export class PlayerCpt25Component {
     return data;
   }
 
-  // ngOnInit(): void {
-  //   this.playerName = this.route.snapshot.paramMap.get('name');
+  createRatingChartData(
+    matches: Match[],
+    idToPlayer: { [key: string]: Player }
+  ): ChartOptions {
+    matches.sort(
+      (a, b) => new Date(a.Datetime).getTime() - new Date(b.Datetime).getTime()
+    );
 
-  //   this.http
-  //     .get('assets/sfl_2023/players.tsv', { responseType: 'text' })
-  //     .subscribe((playerTsv) => {
-  //       this.http
-  //         .get('assets/sfl_2023/player_data.tsv', { responseType: 'text' })
-  //         .subscribe((playerDataTsv) => {
-  //           this.playerData = this.loadPlayerData(playerTsv, playerDataTsv);
-  //           console.log(this.playerData);
+    let currentRating = 1500;
+    let ratings = [currentRating];
+    for (let match of matches) {
+      if (match.Player1 === this.playerId) {
+        currentRating += match.RateDiff;
+      } else {
+        currentRating -= match.RateDiff;
+      }
+      ratings.push(currentRating);
+    }
 
-  //           this.winRateTableData = this.createWinRateTableData(playerDataTsv);
-  //           console.log(this.winRateTableData);
-  //         });
-  //     });
-
-  //   this.http
-  //     .get('assets/sfl_2023/ratings.tsv', { responseType: 'text' })
-  //     .subscribe((ratingsTsv) => {
-  //       this.chartOptions = this.createRatingChartData(ratingsTsv);
-  //       console.log(this.chartOptions);
-  //     });
-
-  //   this.http
-  //     .get('assets/sfl_2023/results.tsv', { responseType: 'text' })
-  //     .subscribe((resultsTsv) => {
-  //       this.battleRecordTableData = this.createBattleRecordData(resultsTsv);
-  //       console.log(this.battleRecordTableData);
-  //     });
-  // }
-
-  // loadPlayerData(playerTsv: string, playerDataTsv: string): PlayerData {
-  //   let playerLines = playerTsv.split('\n');
-  //   playerLines.shift();
-  //   let playerValues: string[] = [];
-  //   for (let line of playerLines) {
-  //     const values = line.split('\t');
-  //     if (values.length == 0) continue;
-  //     if (values[0] == this.playerName) {
-  //       playerValues = values;
-  //       break;
-  //     }
-  //   }
-  //   console.assert(playerValues.length > 0);
-
-  //   let PlayerDatalines = playerDataTsv.split('\n');
-  //   PlayerDatalines.shift();
-  //   let playerDataValues: string[] = [];
-  //   for (let line of PlayerDatalines) {
-  //     const values = line.split('\t');
-  //     if (values.length == 0) continue;
-  //     if (values[0] == this.playerName) {
-  //       playerDataValues = values;
-  //       break;
-  //     }
-  //   }
-  //   console.assert(playerDataValues.length > 0);
-
-  //   const data: PlayerData = {
-  //     twitterId: playerValues[6],
-  //     charactors: playerValues[7],
-  //     rank: Math.round(Number(playerDataValues[6])),
-  //     latestRating: Math.round(Number(playerDataValues[2])),
-  //     bestRating: Math.round(Number(playerDataValues[3])),
-  //     worstRating: Math.round(Number(playerDataValues[4])),
-  //     winRate: Math.round(Number(playerDataValues[9]) * 100),
-  //     winN: Math.round(Number(playerDataValues[11])),
-  //     loseN: Math.round(Number(playerDataValues[12])),
-  //   };
-  //   return data;
-  // }
-
-  // createRatingChartData(ratingsTsv: string): ChartOptions {
-  //   let lines = ratingsTsv.split('\n');
-  //   lines.shift();
-
-  //   let dateToRatings: { [key: string]: number } = {};
-  //   for (let line of lines) {
-  //     const values = line.split('\t');
-  //     if (values.length == 0) continue;
-  //     if (values[1] != this.playerName) continue;
-
-  //     const date: string = values[0];
-  //     const rating: number = Number(values[2]);
-
-  //     if (date in dateToRatings) continue;
-
-  //     dateToRatings[date] = rating;
-  //   }
-
-  //   return {
-  //     series: [
-  //       {
-  //         name: 'レーティング',
-  //         data: Object.values(dateToRatings).reverse(),
-  //       },
-  //     ],
-  //     chart: {
-  //       height: 350,
-  //       type: 'line',
-  //       zoom: {
-  //         enabled: false,
-  //       },
-  //     },
-  //     dataLabels: {
-  //       enabled: true,
-  //     },
-  //     stroke: {
-  //       curve: 'straight',
-  //     },
-  //     title: {
-  //       text: 'レーティング推移',
-  //       align: 'left',
-  //     },
-  //     grid: {
-  //       row: {
-  //         colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-  //         opacity: 0.5,
-  //       },
-  //     },
-  //     xaxis: {
-  //       categories: Object.keys(dateToRatings).reverse(),
-  //     },
-  //   };
-  // }
+    return {
+      series: [
+        {
+          name: 'レーティング',
+          data: ratings,
+        },
+      ],
+      chart: {
+        height: 350,
+        type: 'line',
+        zoom: {
+          enabled: false,
+        },
+      },
+      dataLabels: {
+        enabled: true,
+        offsetY: -5,
+        formatter: (val: string | number, opts: any) => {
+          // opts.dataPointIndex は現在のデータポイントのインデックスです
+          if (
+            opts.dataPointIndex % 10 === 0 ||
+            opts.dataPointIndex === ratings.length - 1
+          ) {
+            return val;
+          } else {
+            return ''; // または null を返して非表示にする
+          }
+        },
+      },
+      stroke: {
+        curve: 'smooth',
+        width: 3,
+      },
+      title: {
+        text: 'レーティング推移',
+        align: 'left',
+      },
+      grid: {
+        row: {
+          colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+          opacity: 0.5,
+        },
+      },
+      xaxis: {
+        categories: [...new Array(ratings.length).keys()],
+        labels: {
+          formatter: function (val: string, timestamp: number, opts: any) {
+            if (Number(val) % 5 === 0) return val;
+            else return '';
+          },
+        },
+      },
+      tooltip: {
+        x: {
+          formatter: (val: number) => {
+            return `通算${val}試合目`;
+          },
+        },
+        y: {
+          formatter: (val: number, opts) => {
+            const match = matches[opts.dataPointIndex - 1];
+            const sign = match.Player1 === this.playerId ? '+' : '-';
+            return (
+              `${val} (${sign}${match.RateDiff})<br><br>` +
+              `${match.Event}<br>` +
+              `${match.Bracket} ${match.Round}<br>` +
+              `${idToPlayer[match.Player1].gamerTag} VS ${
+                idToPlayer[match.Player2].gamerTag
+              }`
+            );
+          },
+          title: {
+            formatter: (series) => {
+              console.log(series);
+              return '';
+            },
+          },
+        },
+      },
+    };
+  }
 
   // createWinRateTableData(playerDataTsv: string): WinRateRecord[] {
   //   let lines = playerDataTsv.split('\n');
