@@ -45,11 +45,13 @@
         </mat-card-content>
     </mat-card>
 
-    <div id="chart" style="margin:25px 5px 5px 5px;">
-        <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
-            [dataLabels]="chartOptions.dataLabels" [grid]="chartOptions.grid" [stroke]="chartOptions.stroke"
-            [title]="chartOptions.title" [tooltip]="chartOptions.tooltip"></apx-chart>
-    </div>
+    <mat-card id="chart" style="margin:25px 5px 25px 5px;">
+        <mat-card-content>
+            <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
+                [dataLabels]="chartOptions.dataLabels" [grid]="chartOptions.grid" [stroke]="chartOptions.stroke"
+                [title]="chartOptions.title" [tooltip]="chartOptions.tooltip"></apx-chart>
+        </mat-card-content>
+    </mat-card>
 
     <!-- TODO: add opponet ratings, rateDiff -->
     <mat-card style="margin:5px 5px 10px 5px;">
