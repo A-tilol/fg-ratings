@@ -375,7 +375,8 @@ export class PlayerCpt25Component {
               `${match.Bracket} ${match.Round}<br>` +
               `${idToPlayer[match.Player1].gamerTag} VS ${
                 idToPlayer[match.Player2].gamerTag
-              }`
+              }<br>` +
+              `${match.Player1Score} - ${match.Player2Score}`
             );
           },
           title: {
