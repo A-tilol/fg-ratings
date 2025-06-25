@@ -1,0 +1,38 @@
+{
+  "SITE_TITLE": "SF6 Fighting Gamer Ranking",
+  "MENU": {
+    "CPT2025": "SF6 CPT 2025",
+    "SFL2023_INDIVIDUAL": "SFL2023 Individual",
+    "SFL2023_TEAM": "SFL2023 Team"
+  },
+  "SHARE_ON_TWITTER": "Share",
+  "PLAYER_CPT25": {
+    "RANK": "Rank",
+    "RATING": "Rating",
+    "WIN_RATE": "Win Rate",
+    "WINS": "W",
+    "LOSSES": "L",
+    "CHARACTERS_USED": "Characters",
+    "TOURNAMENT_RESULTS": "Tournament Results",
+    "PLACEMENT_SUFFIX": "",
+    "MATCH_HISTORY": "Match History",
+    "PAGINATOR_LABEL": "Select page",
+    "TABLE": {
+      "EVENT": "Event",
+      "SCORE": "Score",
+      "OPPONENT": "Opponent",
+      "RATE": "Rating"
+    },
+    "CHART": {
+      "SERIES_NAME_RATING": "Rating",
+      "TITLE_RATING_TRANSITION": "Rating History",
+      "TOOLTIP_MATCH_COUNT_PREFIX": "Match",
+      "TOOLTIP_MATCH_COUNT_SUFFIX": ""
+    }
+  },
+  "RATINGS": {
+    "TITLE": "SF6 CPT2025 Rating Ranking",
+    "SUBTITLE": "Aggregated based on start.gg results from the following tournaments",
+    "TOURNAMENT_WIN_PARENTHESIS": "({{count}}wins)"
+  }
+}
