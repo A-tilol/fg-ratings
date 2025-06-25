@@ -15,7 +15,7 @@ import {
   ApexXAxis,
   ChartComponent,
 } from 'ng-apexcharts';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { AssetLoadService } from '../asset-load.service';
 import { Match, Placement, Player, Ratings } from '../interfaces';
 
@@ -117,6 +117,8 @@ export class PlayerCpt25Component {
     'winRate',
   ];
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -145,38 +147,49 @@ export class PlayerCpt25Component {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit(): void {
-    this.playerId = this.route.snapshot.paramMap.get('id');
-    if (this.playerId === null) {
-      console.error('playerIdが取得できませんでした。');
-      return;
-    }
+    // 戻るボタン使用時にコンポーネントが再描画されるようURLパラメータ変化を購読
+    this.route.paramMap
+      .pipe(takeUntil(this.destroy$)) // コンポーネント破棄時に購読を自動解除
+      .subscribe(() => {
+        this.playerId = this.route.snapshot.paramMap.get('id');
+        if (this.playerId === null) {
+          console.error('playerIdが取得できませんでした。');
+          return;
+        }
 
-    forkJoin({
-      idToRating: this.assetLoadService.loadCpt2025Ratings(),
-      idToPlayer: this.assetLoadService.loadCpt2025Players(),
-      placements: this.assetLoadService.loadCpt2025Placements(),
-      matches: this.assetLoadService.loadCpt2025Matches(this.playerId),
-    }).subscribe({
-      next: ({ idToRating, idToPlayer, placements, matches }) => {
-        this.playerData = this.createPlayerData(
-          idToRating,
-          idToPlayer,
-          placements,
-          matches
-        );
-        this.chartOptions = this.createRatingChartData(matches, idToPlayer);
-        this.battleRecordTableData = new MatTableDataSource(
-          this.createBattleRecordData(matches, idToPlayer)
-        );
-        this.battleRecordTableData.paginator = this.paginator;
-      },
-      error: (error) => {
-        console.error('データロード中にエラーが発生しました:', error);
-      },
-      complete: () => {
-        console.log('forkJoin購読完了');
-      },
-    });
+        // データ取得
+        forkJoin({
+          idToRating: this.assetLoadService.loadCpt2025Ratings(),
+          idToPlayer: this.assetLoadService.loadCpt2025Players(),
+          placements: this.assetLoadService.loadCpt2025Placements(),
+          matches: this.assetLoadService.loadCpt2025Matches(this.playerId),
+        }).subscribe({
+          next: ({ idToRating, idToPlayer, placements, matches }) => {
+            this.playerData = this.createPlayerData(
+              idToRating,
+              idToPlayer,
+              placements,
+              matches
+            );
+            this.chartOptions = this.createRatingChartData(matches, idToPlayer);
+            this.battleRecordTableData = new MatTableDataSource(
+              this.createBattleRecordData(matches, idToPlayer)
+            );
+            this.battleRecordTableData.paginator = this.paginator;
+          },
+          error: (error) => {
+            console.error('データロード中にエラーが発生しました:', error);
+          },
+          complete: () => {
+            console.log('forkJoin購読完了');
+          },
+        });
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   createPlayerData(
