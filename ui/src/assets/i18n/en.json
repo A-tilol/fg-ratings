@@ -29,5 +29,10 @@
       "TOOLTIP_MATCH_COUNT_PREFIX": "Match",
       "TOOLTIP_MATCH_COUNT_SUFFIX": ""
     }
+  },
+  "RATINGS": {
+    "TITLE": "SF6 CPT2025 Rating Ranking",
+    "SUBTITLE": "Aggregated based on start.gg results from the following tournaments",
+    "TOURNAMENT_WIN_PARENTHESIS": "({{count}}wins)"
   }
 }

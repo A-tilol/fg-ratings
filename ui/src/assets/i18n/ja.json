@@ -29,5 +29,10 @@
       "TOOLTIP_MATCH_COUNT_PREFIX": "通算",
       "TOOLTIP_MATCH_COUNT_SUFFIX": "試合目"
     }
+  },
+  "RATINGS": {
+    "TITLE": "SF6 CPT2025 レートランキング",
+    "SUBTITLE": "以下の大会のstart.ggの戦績をもとに集計",
+    "TOURNAMENT_WIN_PARENTHESIS": "(優勝{{count}}回)"
   }
 }
