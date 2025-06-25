@@ -21,6 +21,10 @@ export class AppComponent {
     );
   }
 
+  changeLanguage(lang: string) {
+    this.translate.use(lang);
+  }
+
   shareWithTwitter() {
     window.open(
       'https://twitter.com/intent/tweet?text=格ゲーマーレーティング&url=https://a-tilol.github.io/fg-ratings/',

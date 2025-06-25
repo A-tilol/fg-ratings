@@ -1,3 +1,9 @@
 {
-  "SITE_TITLE": "SF6 Fighting Gamer Ranking"
+  "SITE_TITLE": "SF6 Fighting Gamer Ranking",
+  "MENU": {
+    "CPT2025": "SF6 CPT 2025",
+    "SFL2023_INDIVIDUAL": "SFL2023 Individual",
+    "SFL2023_TEAM": "SFL2023 Team"
+  },
+  "SHARE_ON_TWITTER": "Share"
 }

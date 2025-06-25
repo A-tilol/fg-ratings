@@ -1,3 +1,9 @@
 {
-  "SITE_TITLE": "SF6 格ゲーマーランキング"
+  "SITE_TITLE": "SF6 格ゲーマーランキング",
+  "MENU": {
+    "CPT2025": "SF6 CPT 2025",
+    "SFL2023_INDIVIDUAL": "SFL2023 個人",
+    "SFL2023_TEAM": "SFL2023 チーム"
+  },
+  "SHARE_ON_TWITTER": "ツイートする"
 }
