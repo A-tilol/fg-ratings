@@ -95,7 +95,9 @@ export class AssetLoadService {
             continue;
 
           data.push({
-            Datetime: match['Datetime(UTC)'],
+            Datetime: match['Datetime(UTC)']
+              .replace(' UTC', 'Z')
+              .replace(' ', 'T'),
             Event: match.Event,
             Bracket: match.Bracket,
             Round: match.Round,
