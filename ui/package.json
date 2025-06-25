@@ -21,6 +21,8 @@
     "@angular/platform-browser": "^16.1.0",
     "@angular/platform-browser-dynamic": "^16.1.0",
     "@angular/router": "^16.1.0",
+    "@ngx-translate/core": "^16.0.4",
+    "@ngx-translate/http-loader": "^16.0.1",
     "apexcharts": "^3.41.0",
     "lodash": "^4.17.21",
     "ng-apexcharts": "^1.8.0",

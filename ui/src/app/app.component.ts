@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +8,18 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor(public router: Router) {}
+  constructor(public router: Router, private translate: TranslateService) {
+    this.translate.addLangs(['en', 'ja']); // アプリケーションでサポートする言語
+    this.translate.setDefaultLang('en'); // デフォルト言語を設定
+
+    // サポートされている言語の場合のみ、その言語を使用
+    const browserLang = this.translate.getBrowserLang();
+    this.translate.use(
+      browserLang && this.translate.langs.includes(browserLang)
+        ? browserLang
+        : 'en'
+    );
+  }
 
   shareWithTwitter() {
     window.open(
