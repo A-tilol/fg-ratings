@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -119,6 +120,7 @@ export class PlayerCpt25Component {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private location: Location,
     private assetLoadService: AssetLoadService
   ) {
     this.chartOptions = {
@@ -392,6 +394,10 @@ export class PlayerCpt25Component {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       this.router.navigate(['cpt2025/player/', playerId]);
     });
+  }
+
+  goBack() {
+    this.location.back();
   }
 
   // getWinrateColor(winRate: string) {
