@@ -4,23 +4,32 @@
             <mat-icon>menu</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="router.navigate(['/cpt2025/ratings'])"><mat-icon>trending_up</mat-icon>SF6
-                CPT
-                2025
+            <button mat-menu-item
+                (click)="router.navigate(['/cpt2025/ratings'])"><mat-icon>trending_up</mat-icon>{{'MENU.CPT2025' |
+                translate}}
             </button>
-            <button mat-menu-item (click)="router.navigate(['/home'])"><mat-icon>trending_up</mat-icon>SFL2023
-                個人</button>
-            <button mat-menu-item (click)="router.navigate(['/team'])"><mat-icon>trending_up</mat-icon>SFL2023
-                チーム</button>
+            <button mat-menu-item
+                (click)="router.navigate(['/home'])"><mat-icon>trending_up</mat-icon>{{'MENU.SFL2023_INDIVIDUAL' |
+                translate}}</button>
+            <button mat-menu-item
+                (click)="router.navigate(['/team'])"><mat-icon>trending_up</mat-icon>{{'MENU.SFL2023_TEAM' |
+                translate}}</button>
             <!-- <button mat-menu-item disabled><mat-icon>trending_up</mat-icon>CAPCOM Pro Tour 2023</button> -->
             <!-- <button mat-menu-item disabled><mat-icon>calculate</mat-icon>レーティング計算方式</button> -->
         </mat-menu>
-        <span style="font-size:0.9em;">SF6 格ゲーマーレーティング</span>
+        <span style="font-size:0.9em;">{{'SITE_TITLE' | translate}}</span>
         <span class="example-spacer" style="flex: 1 1 auto;"></span>
         <button mat-flat-button color="primary" style="width:110px;" (click)="shareWithTwitter()">
             <img src="assets/2021 Twitter logo - white.png" style="width:20%;margin-right:2px;padding-top:10px;">
-            <span style="color:white; font-size:0.8em">ツイートする</span>
+            <span style="color:white; font-size:0.9em;">{{'SHARE_ON_TWITTER' | translate}}</span>
         </button>
+        <button mat-icon-button [matMenuTriggerFor]="langMenu" style="margin-left:10px" aria-label="Select language">
+            <mat-icon>language</mat-icon>
+        </button>
+        <mat-menu #langMenu="matMenu">
+            <button mat-menu-item (click)="changeLanguage('en')">English</button>
+            <button mat-menu-item (click)="changeLanguage('ja')">日本語</button>
+        </mat-menu>
     </mat-toolbar>
 
     <div class="page-content">

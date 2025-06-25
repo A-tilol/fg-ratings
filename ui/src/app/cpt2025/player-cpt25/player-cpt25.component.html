@@ -21,7 +21,7 @@
                                 style="font-size: large; vertical-align: text-bottom; padding-right: 3px">
                                 workspace_premium
                             </span>
-                            <span>ランク</span>
+                            <span>{{ 'PLAYER_CPT25.RANK' | translate }}</span>
                         </div>
                         <div class="grid-item">
                             <span class="player-data">{{playerData.rank}}</span>
@@ -38,7 +38,7 @@
                                 style="font-size: large; vertical-align: text-bottom; padding-right: 3px">
                                 trending_up
                             </span>
-                            <span>レーティング</span>
+                            <span>{{ 'PLAYER_CPT25.RATING' | translate }}</span>
                         </div>
                         <div class="grid-item">
                             <span class="player-data">{{playerData.latestRating}}</span>
@@ -55,11 +55,11 @@
                                 style="font-size: large; vertical-align: text-bottom; padding-right: 3px">
                                 sports_mma
                             </span>
-                            <span>勝率</span>
+                            <span>{{ 'PLAYER_CPT25.WIN_RATE' | translate }}</span>
                         </div>
                         <div class="grid-item">
                             <span class="player-data">{{playerData.winRate}}％</span>
-                            ({{playerData.winN}}勝{{playerData.loseN}}敗)
+                            ({{playerData.winN}}{{ 'PLAYER_CPT25.WINS' | translate }}{{playerData.loseN}}{{ 'PLAYER_CPT25.LOSSES' | translate }})
                         </div>
                     </div>
                 </mat-card-content>
@@ -73,7 +73,7 @@
                                 style="font-size: large; vertical-align: text-bottom; padding-right: 3px">
                                 sports_martial_arts
                             </span>
-                            <span>使用キャラ</span>
+                            <span>{{ 'PLAYER_CPT25.CHARACTERS_USED' | translate }}</span>
                         </div>
                         <div class="grid-item">
                             <span class="player-data">{{playerData.charactors}}</span>
@@ -87,11 +87,11 @@
                         style="font-size: large; vertical-align: text-bottom; padding-right: 3px">
                         sports_esports
                     </span>
-                    大会成績
+                    {{ 'PLAYER_CPT25.TOURNAMENT_RESULTS' | translate }}
                     <div class="grid-container" *ngFor="let result of playerData.results">
                         <div class="grid-item"></div>
                         <div class="grid-item">{{result.event}}</div>
-                        <div class="grid-item"><span class="player-data">{{result.placement}} 位</span></div>
+                        <div class="grid-item"><span class="player-data">{{result.placement}}{{ 'PLAYER_CPT25.PLACEMENT_SUFFIX' | translate }}</span></div>
                     </div>
                 </mat-card-content>
             </mat-card>
@@ -109,7 +109,7 @@
     <!-- TODO: add opponet ratings, rateDiff -->
     <mat-card style="margin:5px 5px 10px 5px;">
         <mat-card-header>
-            <mat-card-title> 戦績 </mat-card-title>
+            <mat-card-title> {{ 'PLAYER_CPT25.MATCH_HISTORY' | translate }} </mat-card-title>
         </mat-card-header>
         <mat-card-content style="margin-top:10px">
             <table mat-table [dataSource]="battleRecordTableData" class="mat-elevation-z8" style="font-size:0.8em">
@@ -123,7 +123,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="event">
-                    <th mat-header-cell *matHeaderCellDef style="min-width:60px;"> 大会 </th>
+                    <th mat-header-cell *matHeaderCellDef style="min-width:60px;"> {{ 'PLAYER_CPT25.TABLE.EVENT' | translate }} </th>
                     <td mat-cell *matCellDef="let element" style="min-width:60px;">
                         {{element.event}}
                         <div style="color: #777; font-size: x-small; line-height: 1.0;">
@@ -134,7 +134,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="score">
-                    <th mat-header-cell *matHeaderCellDef style="min-width:40px;"> スコア </th>
+                    <th mat-header-cell *matHeaderCellDef style="min-width:40px;"> {{ 'PLAYER_CPT25.TABLE.SCORE' | translate }} </th>
                     <td mat-cell *matCellDef="let element" style="min-width:40px;">
                         <ng-container *ngIf="element.isWin; else loseTag"><span
                                 style="color:red;font-weight:bold;">◯</span></ng-container>
@@ -145,7 +145,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="opponent">
-                    <th mat-header-cell *matHeaderCellDef style="min-width:40px;"> 対戦相手 </th>
+                    <th mat-header-cell *matHeaderCellDef style="min-width:40px;"> {{ 'PLAYER_CPT25.TABLE.OPPONENT' | translate }} </th>
                     <td mat-cell *matCellDef="let element" style="max-width:150px;">
                         <button mat-stroked-button
                             (click)="navigateToPlayerComponent(element.opponenId)">{{element.opponenTag}}</button>
@@ -153,7 +153,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="rating">
-                    <th mat-header-cell *matHeaderCellDef style="min-width:80px;"> レート </th>
+                    <th mat-header-cell *matHeaderCellDef style="min-width:80px;"> {{ 'PLAYER_CPT25.TABLE.RATE' | translate }} </th>
                     <td mat-cell *matCellDef="let element" style="min-width:80px; font-weight: 500">
                         <div>{{element.rating}}</div>
                         <div [ngStyle]="element.isWin ? {'color': '#28A745'} : {'color': '#F44336'}">
@@ -175,7 +175,7 @@
             </table>
 
             <mat-paginator [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons
-                aria-label="Select page of periodic elements" style="margin-top: 3px;">
+                [attr.aria-label]="'PLAYER_CPT25.PAGINATOR_LABEL' | translate" style="margin-top: 3px;">
             </mat-paginator>
         </mat-card-content>
     </mat-card>

@@ -1,8 +1,8 @@
 <mat-card style="margin-bottom:15px;">
     <mat-card-header>
-        <mat-card-title style="font-size: x-large;">SF6 CPT2025 レートランキング</mat-card-title>
+        <mat-card-title style="font-size: x-large;">{{ 'RATINGS.TITLE' | translate }}</mat-card-title>
         <mat-card-subtitle>
-            <div style="padding-top: 1em;">以下の大会のstart.ggの戦績をもとに集計</div>
+            <div style="padding-top: 1em;">{{ 'RATINGS.SUBTITLE' | translate }}</div>
             <div style="padding-left: 2em;">
                 <li>EVO Japan 2025</li>
                 <li>COMBO BREAKER 2025</li>
@@ -95,7 +95,7 @@
                 <span>{{element.cptPoint}}</span>
                 <ng-container *ngIf="element.tournamentWinCnt > 0">
                     <span
-                        style="font-size: smaller; font-weight: 500; padding-left:5px">(優勝{{element.tournamentWinCnt}}回)</span>
+                        style="font-size: smaller; font-weight: 500; padding-left:5px">{{ 'RATINGS.TOURNAMENT_WIN_PARENTHESIS' | translate: {count: element.tournamentWinCnt} }}</span>
                 </ng-container>
             </td>
         </ng-container>

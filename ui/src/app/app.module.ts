@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -25,6 +25,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgApexchartsModule } from 'ng-apexcharts';
 
 @NgModule({
@@ -54,6 +56,18 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     MatFormFieldModule,
     MatSelectModule,
     NgFor,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (http: HttpClient) => {
+          // 翻訳ファイルをロードするためのファクトリ関数を定義
+          return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+        },
+        deps: [HttpClient],
+      },
+      // 他の言語が設定されていない場合や、翻訳キーが見つからない場合のフォールバックとしても機能
+      defaultLanguage: 'en',
+    }),
   ],
   providers: [AssetLoadService],
   bootstrap: [AppComponent],

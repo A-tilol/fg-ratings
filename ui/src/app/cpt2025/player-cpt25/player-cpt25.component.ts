@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { MatTableDataSource } from '@angular/material/table';
+import { TranslateService } from '@ngx-translate/core';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -117,18 +118,22 @@ export class PlayerCpt25Component {
     'winRate',
   ];
 
+  private idToPlayer: { [key: string]: Player } = {};
+  private matches: Match[] = [];
+
   private destroy$ = new Subject<void>();
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private location: Location,
-    private assetLoadService: AssetLoadService
+    private assetLoadService: AssetLoadService,
+    private translate: TranslateService
   ) {
     this.chartOptions = {
       series: [
         {
-          name: 'レーティング',
+          name: this.translate.instant('PLAYER_CPT25.CHART.SERIES_NAME_RATING'),
           data: [0],
         },
       ],
@@ -137,7 +142,11 @@ export class PlayerCpt25Component {
       },
       dataLabels: {},
       stroke: {},
-      title: {},
+      title: {
+        text: this.translate.instant(
+          'PLAYER_CPT25.CHART.TITLE_RATING_TRANSITION'
+        ),
+      },
       grid: {},
       xaxis: {},
       tooltip: {},
@@ -165,13 +174,16 @@ export class PlayerCpt25Component {
           matches: this.assetLoadService.loadCpt2025Matches(this.playerId),
         }).subscribe({
           next: ({ idToRating, idToPlayer, placements, matches }) => {
+            this.idToPlayer = idToPlayer;
+            this.matches = matches;
+
             this.playerData = this.createPlayerData(
               idToRating,
               idToPlayer,
               placements,
               matches
             );
-            this.chartOptions = this.createRatingChartData(matches, idToPlayer);
+            this.updateChartOptions();
             this.battleRecordTableData = new MatTableDataSource(
               this.createBattleRecordData(matches, idToPlayer)
             );
@@ -184,6 +196,13 @@ export class PlayerCpt25Component {
             console.log('forkJoin購読完了');
           },
         });
+
+        // 言語変更を購読
+        this.translate.onLangChange
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(() => {
+            this.updateChartOptions();
+          });
       });
   }
 
@@ -252,6 +271,13 @@ export class PlayerCpt25Component {
     return data;
   }
 
+  updateChartOptions(): void {
+    this.chartOptions = this.createRatingChartData(
+      this.matches,
+      this.idToPlayer
+    );
+  }
+
   createRatingChartData(
     matches: Match[],
     idToPlayer: { [key: string]: Player }
@@ -274,7 +300,7 @@ export class PlayerCpt25Component {
     return {
       series: [
         {
-          name: 'レーティング',
+          name: this.translate.instant('PLAYER_CPT25.CHART.SERIES_NAME_RATING'),
           data: ratings,
         },
       ],
@@ -305,7 +331,9 @@ export class PlayerCpt25Component {
         width: 3,
       },
       title: {
-        text: 'レーティング推移',
+        text: this.translate.instant(
+          'PLAYER_CPT25.CHART.TITLE_RATING_TRANSITION'
+        ),
         align: 'left',
       },
       grid: {
@@ -326,7 +354,15 @@ export class PlayerCpt25Component {
       tooltip: {
         x: {
           formatter: (val: number) => {
-            return `通算${val}試合目`;
+            return (
+              this.translate.instant(
+                'PLAYER_CPT25.CHART.TOOLTIP_MATCH_COUNT_PREFIX'
+              ) +
+              val +
+              this.translate.instant(
+                'PLAYER_CPT25.CHART.TOOLTIP_MATCH_COUNT_SUFFIX'
+              )
+            );
           },
         },
         y: {

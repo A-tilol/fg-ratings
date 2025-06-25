@@ -1,0 +1,38 @@
+{
+  "SITE_TITLE": "SF6 格ゲーマーランキング",
+  "MENU": {
+    "CPT2025": "SF6 CPT 2025",
+    "SFL2023_INDIVIDUAL": "SFL2023 個人",
+    "SFL2023_TEAM": "SFL2023 チーム"
+  },
+  "SHARE_ON_TWITTER": "ツイートする",
+  "PLAYER_CPT25": {
+    "RANK": "ランク",
+    "RATING": "レーティング",
+    "WIN_RATE": "勝率",
+    "WINS": "勝",
+    "LOSSES": "敗",
+    "CHARACTERS_USED": "使用キャラ",
+    "TOURNAMENT_RESULTS": "大会成績",
+    "PLACEMENT_SUFFIX": "位",
+    "MATCH_HISTORY": "戦績",
+    "PAGINATOR_LABEL": "ページを選択",
+    "TABLE": {
+      "EVENT": "大会",
+      "SCORE": "スコア",
+      "OPPONENT": "対戦相手",
+      "RATE": "レート"
+    },
+    "CHART": {
+      "SERIES_NAME_RATING": "レーティング",
+      "TITLE_RATING_TRANSITION": "レーティング推移",
+      "TOOLTIP_MATCH_COUNT_PREFIX": "通算",
+      "TOOLTIP_MATCH_COUNT_SUFFIX": "試合目"
+    }
+  },
+  "RATINGS": {
+    "TITLE": "SF6 CPT2025 レートランキング",
+    "SUBTITLE": "以下の大会のstart.ggの戦績をもとに集計",
+    "TOURNAMENT_WIN_PARENTHESIS": "(優勝{{count}}回)"
+  }
+}
