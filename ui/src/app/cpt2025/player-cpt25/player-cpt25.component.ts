@@ -116,8 +116,6 @@ export class PlayerCpt25Component {
     'winRate',
   ];
 
-  sortedMatches: Match[] = [];
-
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -244,11 +242,8 @@ export class PlayerCpt25Component {
     idToPlayer: { [key: string]: Player }
   ): ChartOptions {
     matches.sort(
-      (a, b) =>
-        new Date(a.Datetime.slice(0, 19)).getTime() -
-        new Date(b.Datetime.slice(0, 19)).getTime()
+      (a, b) => new Date(a.Datetime).getTime() - new Date(b.Datetime).getTime()
     );
-    this.sortedMatches = matches;
 
     let currentRating = 1500;
     let ratings = [currentRating];
