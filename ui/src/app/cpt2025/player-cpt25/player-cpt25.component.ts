@@ -244,7 +244,9 @@ export class PlayerCpt25Component {
     idToPlayer: { [key: string]: Player }
   ): ChartOptions {
     matches.sort(
-      (a, b) => new Date(a.Datetime).getTime() - new Date(b.Datetime).getTime()
+      (a, b) =>
+        new Date(a.Datetime.slice(0, 19)).getTime() -
+        new Date(b.Datetime.slice(0, 19)).getTime()
     );
     this.sortedMatches = matches;
 
