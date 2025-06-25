@@ -14,36 +14,84 @@
         <mat-card-content>
             <mat-card style=" margin:10px;">
                 <mat-card-content style="text-align: center;">
-                    ランク
-                    <span class="player-data">{{playerData.rank}}</span>
+                    <div class="grid-container">
+                        <div class="grid-item"></div>
+                        <div class="grid-item">
+                            <span class="material-icons"
+                                style="font-size: large; vertical-align: text-bottom; padding-right: 3px">
+                                workspace_premium
+                            </span>
+                            <span>ランク</span>
+                        </div>
+                        <div class="grid-item">
+                            <span class="player-data">{{playerData.rank}}</span>
+                        </div>
+                    </div>
                 </mat-card-content>
             </mat-card>
             <mat-card style="margin:10px;">
                 <mat-card-content style="text-align: center;">
-                    レーティング
-                    <span class="player-data">{{playerData.latestRating}}</span>
+                    <div class="grid-container">
+                        <div class="grid-item"></div>
+                        <div class="grid-item">
+                            <span class="material-icons"
+                                style="font-size: large; vertical-align: text-bottom; padding-right: 3px">
+                                trending_up
+                            </span>
+                            <span>レーティング</span>
+                        </div>
+                        <div class="grid-item">
+                            <span class="player-data">{{playerData.latestRating}}</span>
+                        </div>
+                    </div>
                 </mat-card-content>
             </mat-card>
             <mat-card style="margin:10px;">
                 <mat-card-content style="text-align: center;">
-                    勝率
-                    <span class="player-data">{{playerData.winRate}}％</span>
-                    ({{playerData.winN}}勝{{playerData.loseN}}敗)
+                    <div class="grid-container">
+                        <div class="grid-item"></div>
+                        <div class="grid-item">
+                            <span class="material-icons"
+                                style="font-size: large; vertical-align: text-bottom; padding-right: 3px">
+                                sports_mma
+                            </span>
+                            <span>勝率</span>
+                        </div>
+                        <div class="grid-item">
+                            <span class="player-data">{{playerData.winRate}}％</span>
+                            ({{playerData.winN}}勝{{playerData.loseN}}敗)
+                        </div>
+                    </div>
                 </mat-card-content>
             </mat-card>
             <mat-card style="margin:10px;">
                 <mat-card-content style="text-align: center;">
-                    使用キャラ
-                    <span class="player-data">{{playerData.charactors}}</span>
+                    <div class="grid-container">
+                        <div class="grid-item"></div>
+                        <div class="grid-item">
+                            <span class="material-icons"
+                                style="font-size: large; vertical-align: text-bottom; padding-right: 3px">
+                                sports_martial_arts
+                            </span>
+                            <span>使用キャラ</span>
+                        </div>
+                        <div class="grid-item">
+                            <span class="player-data">{{playerData.charactors}}</span>
+                        </div>
+                    </div>
                 </mat-card-content>
             </mat-card>
             <mat-card style="margin:10px;">
                 <mat-card-content style="text-align: center;">
+                    <span class="material-icons"
+                        style="font-size: large; vertical-align: text-bottom; padding-right: 3px">
+                        sports_esports
+                    </span>
                     大会成績
                     <div class="grid-container" *ngFor="let result of playerData.results">
                         <div class="grid-item"></div>
                         <div class="grid-item">{{result.event}}</div>
-                        <div class="grid-item">{{result.placement}} 位</div>
+                        <div class="grid-item"><span class="player-data">{{result.placement}} 位</span></div>
                     </div>
                 </mat-card-content>
             </mat-card>
