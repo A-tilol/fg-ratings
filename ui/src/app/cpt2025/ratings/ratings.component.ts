@@ -48,6 +48,9 @@ export class RatingsComponent {
   countries: string[] = [];
   selectedCountry = 'All';
 
+  minRating = 0;
+  maxRating = 0;
+
   constructor(private assetLoadService: AssetLoadService) {}
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -69,6 +72,9 @@ export class RatingsComponent {
           this.filterTableData()
         );
         this.ratingTableData.paginator = this.paginator;
+
+        this.minRating = this.ratingTableData.data.at(-1)!.rating;
+        this.maxRating = this.ratingTableData.data.at(0)!.rating;
       },
       error: (error) => {
         console.error('データロード中にエラーが発生しました:', error);
@@ -176,5 +182,26 @@ export class RatingsComponent {
       return ['flag-icon', `flag-icon-${countryCode.toLocaleLowerCase()}`];
     }
     return [];
+  }
+
+  getColorForRating(rating: number): string {
+    // レートを0から1の範囲に正規化
+    const normalizedRating =
+      (rating - this.minRating) / (this.maxRating - this.minRating);
+
+    // 最高レート（maxRating）を赤（5R, HSLのH=0）とする
+    const maxHue = 0; // 赤
+
+    // 0レートを緑（H=120）あたりに設定すると、赤→黄→緑のグラデーションになる
+    const minHue = 150; // 緑（赤から右回り120度）
+
+    // 正規化されたレートに基づいて色相（Hue）を線形補間
+    const hue = minHue - normalizedRating * (minHue - maxHue);
+
+    // 彩度（Saturation）と輝度（Lightness）は固定で設定
+    const saturation = 50 + 30 * normalizedRating * normalizedRating; // %
+    const lightness = 50; // %
+
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
   }
 }
