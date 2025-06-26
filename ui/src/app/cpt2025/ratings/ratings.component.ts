@@ -34,6 +34,8 @@ export class RatingsComponent {
   private tableDataSource: PlayerRatingElement[] = [];
 
   utils = _utils;
+
+  events: string[] = [];
   ratingTableData: MatTableDataSource<PlayerRatingElement> =
     new MatTableDataSource<PlayerRatingElement>([]);
   displayedColumns: string[] = [
@@ -62,12 +64,16 @@ export class RatingsComponent {
       placements: this.assetLoadService.loadCpt2025Placements(),
     }).subscribe({
       next: ({ idToRating, idToPlayer, placements }) => {
+        this.events = this.getEventList(placements);
+
         this.tableDataSource = this.createTableData(
           idToRating,
           idToPlayer,
           placements
         );
+
         this.countries = this.createCountryList(this.tableDataSource);
+
         this.ratingTableData = new MatTableDataSource<PlayerRatingElement>(
           this.filterTableData()
         );
@@ -83,6 +89,14 @@ export class RatingsComponent {
         console.log('forkJoin購読完了');
       },
     });
+  }
+
+  getEventList(placements: Placement[]): string[] {
+    const events: Set<string> = new Set();
+    for (const placement of placements) {
+      events.add(placement.event);
+    }
+    return [...events];
   }
 
   private createCountryList(players: PlayerRatingElement[]): string[] {
