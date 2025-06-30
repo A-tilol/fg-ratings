@@ -95,6 +95,18 @@ export class RatingsComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.ratingTableData.paginator = this.paginator;
     this.ratingTableData.sort = this.sort;
+    this.ratingTableData.sortingDataAccessor = (item, property) => {
+      switch (property) {
+        case 'cptPoint':
+          let v = item.cptPoint;
+          if (item.ccQualified) {
+            v += 10000;
+          }
+          return v;
+        default:
+          return (item as any)[property];
+      }
+    };
   }
 
   getEventList(placements: Placement[]): string[] {
