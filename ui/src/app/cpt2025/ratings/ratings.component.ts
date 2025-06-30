@@ -22,7 +22,7 @@ export interface PlayerRatingElement {
   game_n: number;
   win_n: number;
   cptPoint: number;
-  tournamentWinCnt: number;
+  ccQualified: boolean;
   isUpdated: boolean;
 }
 
@@ -64,14 +64,16 @@ export class RatingsComponent implements AfterViewInit {
       idToRating: this.assetLoadService.loadCpt2025Ratings(),
       idToPlayer: this.assetLoadService.loadCpt2025Players(),
       placements: this.assetLoadService.loadCpt2025Placements(),
+      additionalData: this.assetLoadService.loadAssetAdditionalJson(),
     }).subscribe({
-      next: ({ idToRating, idToPlayer, placements }) => {
+      next: ({ idToRating, idToPlayer, placements, additionalData }) => {
         this.events = this.getEventList(placements);
 
         this.tableDataSource = this.createTableData(
           idToRating,
           idToPlayer,
-          placements
+          placements,
+          additionalData
         );
 
         this.countries = this.createCountryList(this.tableDataSource);
@@ -93,6 +95,18 @@ export class RatingsComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.ratingTableData.paginator = this.paginator;
     this.ratingTableData.sort = this.sort;
+    this.ratingTableData.sortingDataAccessor = (item, property) => {
+      switch (property) {
+        case 'cptPoint':
+          let v = item.cptPoint;
+          if (item.ccQualified) {
+            v += 10000;
+          }
+          return v;
+        default:
+          return (item as any)[property];
+      }
+    };
   }
 
   getEventList(placements: Placement[]): string[] {
@@ -146,7 +160,8 @@ export class RatingsComponent implements AfterViewInit {
   private createTableData(
     idToRating: { [key: string]: Ratings },
     idToPlayer: { [key: string]: Player },
-    placements: Placement[]
+    placements: Placement[],
+    additionalData: any
   ): PlayerRatingElement[] {
     // 優勝回数とCPTポイントをプレイヤーごとに集計
     const tournamentWinCnt: { [key: string]: number } = {};
@@ -167,6 +182,8 @@ export class RatingsComponent implements AfterViewInit {
       }
     }
 
+    const ccQualifiedPlayers = new Set(additionalData.ccQualified);
+
     const data: PlayerRatingElement[] = [];
     for (let playerId of Object.keys(idToRating)) {
       const rating = idToRating[playerId];
@@ -186,8 +203,7 @@ export class RatingsComponent implements AfterViewInit {
         game_n: rating.winCnt + rating.loseCnt,
         win_n: rating.winCnt,
         cptPoint: idToCptPoint[playerId],
-        tournamentWinCnt:
-          playerId in tournamentWinCnt ? tournamentWinCnt[playerId] : 0,
+        ccQualified: ccQualifiedPlayers.has(playerId),
         isUpdated: false,
       });
     }

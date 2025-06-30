@@ -114,4 +114,11 @@ export class AssetLoadService {
       })
     );
   }
+
+  public loadAssetAdditionalJson(): Observable<any> {
+    const filePath = 'assets/cpt_2025/additional.json';
+    return this.http
+      .get(filePath, { responseType: 'text' })
+      .pipe(map((jsonData: string) => JSON.parse(jsonData)));
+  }
 }
