@@ -22,6 +22,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
@@ -55,6 +56,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     MatPaginatorModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatSortModule,
     NgFor,
     TranslateModule.forRoot({
       loader: {

@@ -1,6 +1,7 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelectChange } from '@angular/material/select';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { forkJoin } from 'rxjs';
 
@@ -30,7 +31,7 @@ export interface PlayerRatingElement {
   templateUrl: './ratings.component.html',
   styleUrls: ['./ratings.component.scss'],
 })
-export class RatingsComponent {
+export class RatingsComponent implements AfterViewInit {
   private tableDataSource: PlayerRatingElement[] = [];
 
   utils = _utils;
@@ -44,7 +45,7 @@ export class RatingsComponent {
     'name',
     'rating',
     'winRate',
-    'CPTPoint',
+    'cptPoint',
   ];
 
   countries: string[] = [];
@@ -56,6 +57,7 @@ export class RatingsComponent {
   constructor(private assetLoadService: AssetLoadService) {}
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   ngOnInit(): void {
     forkJoin({
@@ -74,10 +76,7 @@ export class RatingsComponent {
 
         this.countries = this.createCountryList(this.tableDataSource);
 
-        this.ratingTableData = new MatTableDataSource<PlayerRatingElement>(
-          this.filterTableData()
-        );
-        this.ratingTableData.paginator = this.paginator;
+        this.ratingTableData.data = this.filterTableData();
 
         this.minRating = this.ratingTableData.data.at(-1)!.rating;
         this.maxRating = this.ratingTableData.data.at(0)!.rating;
@@ -89,6 +88,11 @@ export class RatingsComponent {
         console.log('forkJoin購読完了');
       },
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.ratingTableData.paginator = this.paginator;
+    this.ratingTableData.sort = this.sort;
   }
 
   getEventList(placements: Placement[]): string[] {
