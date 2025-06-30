@@ -49,6 +49,7 @@ export interface PlayerData {
   winN: number;
   loseN: number;
   results: Result[];
+  prizeMoney: number;
 }
 
 export interface BattleRecord {
@@ -97,6 +98,7 @@ export class PlayerCpt25Component {
     winN: 0,
     loseN: 0,
     results: [],
+    prizeMoney: 0,
   };
 
   battleRecordTableData: MatTableDataSource<BattleRecord> =
@@ -172,8 +174,15 @@ export class PlayerCpt25Component {
           idToPlayer: this.assetLoadService.loadCpt2025Players(),
           placements: this.assetLoadService.loadCpt2025Placements(),
           matches: this.assetLoadService.loadCpt2025Matches(this.playerId),
+          additionalData: this.assetLoadService.loadAssetAdditionalJson(),
         }).subscribe({
-          next: ({ idToRating, idToPlayer, placements, matches }) => {
+          next: ({
+            idToRating,
+            idToPlayer,
+            placements,
+            matches,
+            additionalData,
+          }) => {
             this.idToPlayer = idToPlayer;
             this.matches = matches;
 
@@ -181,7 +190,8 @@ export class PlayerCpt25Component {
               idToRating,
               idToPlayer,
               placements,
-              matches
+              matches,
+              additionalData
             );
             this.updateChartOptions();
             this.battleRecordTableData = new MatTableDataSource(
@@ -215,7 +225,8 @@ export class PlayerCpt25Component {
     idToRating: { [key: string]: Ratings },
     idToPlayer: { [key: string]: Player },
     placements: Placement[],
-    matches: Match[]
+    matches: Match[],
+    additionalData: any
   ) {
     if (this.playerId === null) return this.playerData;
 
@@ -248,6 +259,16 @@ export class PlayerCpt25Component {
       });
     }
 
+    // 獲得賞金を計算
+    const prize = additionalData.eventPrize;
+    let prizeMoney = 0;
+    for (const result of results) {
+      if (result.event in prize && result.placement in prize[result.event]) {
+        prizeMoney += prize[result.event][result.placement];
+      }
+    }
+    console.log({ prizeMoney });
+
     // プレイヤーデータを作成
     const rating = idToRating[this.playerId];
     const player = idToPlayer[this.playerId];
@@ -266,6 +287,7 @@ export class PlayerCpt25Component {
       winN: rating.winCnt,
       loseN: rating.loseCnt,
       results: results,
+      prizeMoney: prizeMoney,
     };
 
     return data;
