@@ -92,15 +92,13 @@
                 CPT <sub> &nbsp;Pt.</sub>
             </th>
             <td mat-cell *matCellDef="let element" style="min-width:40px;">
+                <mat-icon [style.color]="element.ccQualified ? '#444' : 'transparent'"
+                    style="color:#444; font-size:1.2rem; vertical-align: middle;">workspace_premium</mat-icon>
                 <span>{{element.cptPoint}}</span>
-                <ng-container *ngIf="element.tournamentWinCnt > 0">
-                    <span style="font-size: smaller; font-weight: 500; padding-left:5px">{{
-                        'RATINGS.TOURNAMENT_WIN_PARENTHESIS' | translate: {count: element.tournamentWinCnt} }}</span>
-                </ng-container>
             </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef=" displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
