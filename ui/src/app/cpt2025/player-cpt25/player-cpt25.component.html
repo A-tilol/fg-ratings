@@ -59,7 +59,8 @@
                         </div>
                         <div class="grid-item">
                             <span class="player-data">{{playerData.winRate}}％</span>
-                            ({{playerData.winN}}{{ 'PLAYER_CPT25.WINS' | translate }}{{playerData.loseN}}{{ 'PLAYER_CPT25.LOSSES' | translate }})
+                            ({{playerData.winN}}{{ 'PLAYER_CPT25.WINS' | translate }}{{playerData.loseN}}{{
+                            'PLAYER_CPT25.LOSSES' | translate }})
                         </div>
                     </div>
                 </mat-card-content>
@@ -83,6 +84,23 @@
             </mat-card>
             <mat-card style="margin:10px;">
                 <mat-card-content style="text-align: center;">
+                    <div class="grid-container">
+                        <div class="grid-item"></div>
+                        <div class="grid-item">
+                            <span class="material-icons"
+                                style="font-size: large; vertical-align: text-bottom; padding-right: 3px">
+                                attach_money
+                            </span>
+                            <span>{{ 'PLAYER_CPT25.PRIZE_MONEY' | translate }}</span>
+                        </div>
+                        <div class="grid-item">
+                            <span class="player-data">{{playerData.prizeMoney | currency:'USD':'symbol':'1.0-0'}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card style="margin:10px;">
+                <mat-card-content style="text-align: center;">
                     <span class="material-icons"
                         style="font-size: large; vertical-align: text-bottom; padding-right: 3px">
                         sports_esports
@@ -91,7 +109,8 @@
                     <div class="grid-container" *ngFor="let result of playerData.results">
                         <div class="grid-item"></div>
                         <div class="grid-item">{{result.event}}</div>
-                        <div class="grid-item"><span class="player-data">{{result.placement}}{{ 'PLAYER_CPT25.PLACEMENT_SUFFIX' | translate }}</span></div>
+                        <div class="grid-item"><span class="player-data">{{result.placement}}{{
+                                'PLAYER_CPT25.PLACEMENT_SUFFIX' | translate }}</span></div>
                     </div>
                 </mat-card-content>
             </mat-card>
@@ -123,7 +142,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="event">
-                    <th mat-header-cell *matHeaderCellDef style="min-width:60px;"> {{ 'PLAYER_CPT25.TABLE.EVENT' | translate }} </th>
+                    <th mat-header-cell *matHeaderCellDef style="min-width:60px;"> {{ 'PLAYER_CPT25.TABLE.EVENT' |
+                        translate }} </th>
                     <td mat-cell *matCellDef="let element" style="min-width:60px;">
                         {{element.event}}
                         <div style="color: #777; font-size: x-small; line-height: 1.0;">
@@ -134,7 +154,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="score">
-                    <th mat-header-cell *matHeaderCellDef style="min-width:40px;"> {{ 'PLAYER_CPT25.TABLE.SCORE' | translate }} </th>
+                    <th mat-header-cell *matHeaderCellDef style="min-width:40px;"> {{ 'PLAYER_CPT25.TABLE.SCORE' |
+                        translate }} </th>
                     <td mat-cell *matCellDef="let element" style="min-width:40px;">
                         <ng-container *ngIf="element.isWin; else loseTag"><span
                                 style="color:red;font-weight:bold;">◯</span></ng-container>
@@ -145,7 +166,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="opponent">
-                    <th mat-header-cell *matHeaderCellDef style="min-width:40px;"> {{ 'PLAYER_CPT25.TABLE.OPPONENT' | translate }} </th>
+                    <th mat-header-cell *matHeaderCellDef style="min-width:40px;"> {{ 'PLAYER_CPT25.TABLE.OPPONENT' |
+                        translate }} </th>
                     <td mat-cell *matCellDef="let element" style="max-width:150px;">
                         <button mat-stroked-button
                             (click)="navigateToPlayerComponent(element.opponenId)">{{element.opponenTag}}</button>
@@ -153,7 +175,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="rating">
-                    <th mat-header-cell *matHeaderCellDef style="min-width:80px;"> {{ 'PLAYER_CPT25.TABLE.RATE' | translate }} </th>
+                    <th mat-header-cell *matHeaderCellDef style="min-width:80px;"> {{ 'PLAYER_CPT25.TABLE.RATE' |
+                        translate }} </th>
                     <td mat-cell *matCellDef="let element" style="min-width:80px; font-weight: 500">
                         <div>{{element.rating}}</div>
                         <div [ngStyle]="element.isWin ? {'color': '#28A745'} : {'color': '#F44336'}">
