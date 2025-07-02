@@ -19,3 +19,22 @@
     display: flex;
   }
 }
+
+.custom-align-button {
+  /* Flexboxコンテナにする */
+  display: flex;
+
+  /* 垂直方向の中央揃え */
+  align-items: center;
+
+  /* 水平方向の中央揃え (必要に応じて) */
+  justify-content: center;
+
+  /* アイコンとテキストの間隔 */
+  gap: 8px; /* marginよりgapの方がモダンで便利です */
+
+  /* 元のインラインスタイルをここに移動 */
+  margin-left: 10px;
+  width: 90px;
+  height: 40px;
+}

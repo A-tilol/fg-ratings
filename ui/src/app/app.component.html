@@ -19,12 +19,19 @@
         </mat-menu>
         <span style="font-size:0.9em;">{{'SITE_TITLE' | translate}}</span>
         <span class="example-spacer" style="flex: 1 1 auto;"></span>
-        <button mat-flat-button color="primary" style="width:110px;" (click)="shareWithTwitter()">
-            <img src="assets/2021 Twitter logo - white.png" style="width:20%;margin-right:2px;padding-top:10px;">
+        <button mat-flat-button color="primary" style="width:120px; height:40px; gap: 100px; font-weight: 600"
+            (click)="shareWithTwitter()">
+            <img src="assets/2021 Twitter logo - white.png" style="width:20%;margin-right:4px;padding-top:10px;">
             <span style="color:white; font-size:0.9em;">{{'SHARE_ON_TWITTER' | translate}}</span>
         </button>
-        <button mat-icon-button [matMenuTriggerFor]="langMenu" style="margin-left:10px" aria-label="Select language">
-            <mat-icon>language</mat-icon>
+        <button mat-flat-button color="primary" [matMenuTriggerFor]="langMenu"
+            style="margin-left:10px;width:80px;height:40px;" aria-label="Select language">
+            <div class="custom-align-button" style="gap: 2px">
+                <mat-icon style="font-size:1.2rem">language</mat-icon>
+                <span>
+                    {{translate.currentLang.toUpperCase()}}
+                </span>
+            </div>
         </button>
         <mat-menu #langMenu="matMenu">
             <button mat-menu-item (click)="changeLanguage('en')">English</button>
