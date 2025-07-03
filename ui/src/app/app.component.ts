@@ -1,14 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core'; // OnInitをインポート
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { SlackNotifierService } from './slack-notifier.service'; // SlackNotifierServiceをインポート
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
-  constructor(public router: Router, public translate: TranslateService) {
+export class AppComponent implements OnInit {
+  constructor(
+    public router: Router,
+    public translate: TranslateService,
+    private slackNotifierService: SlackNotifierService // SlackNotifierServiceをDI
+  ) {
     this.translate.addLangs(['en', 'ja']); // アプリケーションでサポートする言語
     this.translate.setDefaultLang('en'); // デフォルト言語を設定
 
@@ -19,6 +24,10 @@ export class AppComponent {
         ? browserLang
         : 'en'
     );
+  }
+
+  ngOnInit(): void {
+    this.slackNotifierService.notifyAccess();
   }
 
   changeLanguage(lang: string) {
