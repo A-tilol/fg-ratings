@@ -80,7 +80,7 @@
         </ng-container>
 
         <ng-container matColumnDef="winRate">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header start="desc"> WinRate </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header start="desc"> Win % </th>
             <td mat-cell *matCellDef="let element">
                 {{element.winRate}}%
                 <sub style="color: #888; font-size: 0.8 em;">{{element.win_n}}/{{element.game_n}}</sub>
