@@ -36,11 +36,11 @@ def get_all_player_ids(placements_tsv_path: str):
 
 
 def fetch_new_players_data(new_player_ids: list) -> list[dict]:
-    country_to_code = json.load("data/country_code.json")
+    country_to_code = json.load(open("data/country_code.json", "r", encoding="utf-8"))
 
     players_data = []
     for i, player_id in enumerate(new_player_ids):
-        print(f"プレイヤー {player_id} の情報を取得 ({i+1}/{len(new_player_ids)})")
+        print(f"プレイヤー {player_id} の情報を取得 ({i + 1}/{len(new_player_ids)})")
         player_data = startgg.run_query(QUERY, {"playerId": player_id})["player"]
         country = ""
         birthday = ""
