@@ -12,6 +12,6 @@ def main(event_slug: str, event_name: str):
 
 if __name__ == "__main__":
     main(
-        event_slug="tournament/evo-2025/event/street-fighter-6",
-        event_name="EVO 2025",
+        event_slug="tournament/ultimate-fighting-arena-2025-3/event/street-fighter-6-cpt-premier-pc",
+        event_name="UFA 2025",
     )
