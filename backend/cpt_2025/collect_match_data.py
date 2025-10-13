@@ -6,7 +6,7 @@ import time
 import pandas as pd
 import startgg
 
-PER_PAGE = 30  # 1ページあたりの取得セット数 (API上限に注意。通常50-100)
+PER_PAGE = 20  # 1ページあたりの取得セット数 (API上限に注意。通常50-100)
 
 # --- GraphQL クエリ ---
 QUERY_SETS = """

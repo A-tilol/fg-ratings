@@ -1,10 +1,15 @@
-[tool.poetry]
+[project]
 name = "fg-ratings"
 version = "0.1.0"
 description = ""
-authors = ["atilol <ggrkssk@gmail.com>"]
-license = "MIT"
+authors = [{ name = "atilol", email = "ggrkssk@gmail.com" }]
 readme = "README.md"
+license = "MIT"
+requires-python = "^3.11"
+dynamic = ["dependencies"]
+
+[tool.poetry]
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.11"
