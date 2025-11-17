@@ -53,6 +53,13 @@ def create_rating_data():
     )
     print(f"{len(matches_df)=}")
 
+    # 古い試合から順に計算するため、時系列昇順に並び替え
+    matches_df["_dt"] = pd.to_datetime(
+        matches_df["Datetime(UTC)"], errors="coerce", utc=True
+    )
+    matches_df = matches_df.sort_values(by=["_dt", "Datetime(UTC)"], ascending=True)
+    matches_df = matches_df.drop(columns="_dt")
+
     print("対戦結果データを元にレートを計算")
     rate_diffs = []
     for row in matches_df.itertuples():
